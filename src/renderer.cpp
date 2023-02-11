@@ -51,14 +51,16 @@ namespace RT_ISICG
 		progressBar.start( height, 50 );
 		chrono.start();
 
+		const float pixelWidth  = ( 1.f / (float)( width  - 1.f ) );
+		const float pixelHeight = ( 1.f / (float)( height - 1.f ) );
+
+		#pragma omp parallel for
 		for ( int j = 0; j < height; j++ )
 		{
+			#pragma omp parallel for
 			for ( int i = 0; i < width; i++ )
 			{
-				float sx1 = ( i / (float)( width  - 1 ) );
-				float sy1 = ( j / (float)( height - 1 ) );
-
-				Ray ray = p_camera->generateRay(sx1,sy1);
+				//Ray ray = p_camera->generateRay(sx,sy);
 
 				// Image Figure 1.a
 				//p_texture.setPixel( i, j, Vec3f( sx, sy, 0.f ) );
@@ -67,23 +69,26 @@ namespace RT_ISICG
 				//p_texture.setPixel( i, j, ( ray.getDirection() + 1.f ) * 0.5f );
 
 				// Image Figures 3 et 5
-				Vec3f color = glm::clamp(_integrator->Li( p_scene, ray, distMin, distMax ), 0.f, 1.f);
-				p_texture.setPixel( i, j, color );
+				//Vec3f color = glm::clamp(_integrator->Li( p_scene, ray, distMin, distMax ), 0.f, 1.f);
+				//p_texture.setPixel( i, j, color );
 				
-				/*
+				// Anti-Aliasing
 				Vec3f couleur = VEC3F_ZERO;
+				_integrator->setNbLightSamples( 4 );
 
 				for (int k = 0; k < _nbPixelSamples; ++k)
 				{
-					float sx  = (std::fmod( rand(), ( sx2 - sx1 + 1 ) ) + sx1 ) / 10000.f;
-					float sy  = (std::fmod( rand(), ( sy2 - sy1 + 1 ) ) + sy1 ) / 10000.f;
-					Ray	 ray  = p_camera->generateRay( sx, sy );
+					const float sx = ( i + randomFloat() ) * pixelWidth;
+					const float sy = ( j + randomFloat() ) * pixelHeight;
+
+					const Ray	 ray  = p_camera->generateRay( sx, sy );
 					couleur += _integrator->Li( p_scene, ray, distMin, distMax );
 				}
 
 				couleur /= _nbPixelSamples;
+				couleur = glm::clamp( couleur, 0.f, 1.f );
 				p_texture.setPixel( i, j, couleur );
-				*/
+				
 			}
 			progressBar.next();
 		}

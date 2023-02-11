@@ -28,8 +28,7 @@ namespace RT_ISICG
 
 		if ( _geometry.intersect( p_ray, t ) )
 		{
-			if ( t > p_tMax ) { return false; }; // Vérifier que l'intersection est suffisemment proche
-			if ( t < p_tMin ) { return false; }; // Mais pas trop
+			if ( t > p_tMax || t < p_tMin ) { return false; };
 
 			return true;
 		}

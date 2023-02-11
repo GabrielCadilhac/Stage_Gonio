@@ -2,7 +2,6 @@
 #define __RT_ISICG_BASE_LIGHT__
 
 #include "light_sample.hpp"
-//#include "defines.hpp"
 
 namespace RT_ISICG
 {
@@ -13,13 +12,14 @@ namespace RT_ISICG
 		virtual ~BaseLight() = default;
 
 		inline const Vec3f & getFlatColor() const { return _color; }
+		inline const bool  & getIsSurface() const { return _isSurface; };
 
 		virtual LightSample sample( const Vec3f & p_point ) const = 0;
 
 	  protected:
-		// TODO: give a name, like objects and materials
 		Vec3f _color = WHITE;
 		float _power = 1.f;
+		bool  _isSurface = false;
 	};
 
 } // namespace RT_ISICG

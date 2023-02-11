@@ -3,6 +3,7 @@
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "lights/point_light.hpp"
+#include "lights/quad_light.hpp"
 #include "objects/triangle_mesh.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -43,7 +44,8 @@ namespace RT_ISICG
 		_attachMaterialToObject( "Red", "Plane1" );
 
 		// Add lights.
-		_addLight( new PointLight(Vec3f(1.f, 10.f, 3.f), WHITE, 100.f) );
+		//_addLight( new PointLight( Vec3f( 1, 10, 1 ), WHITE, 100 ) );
+		_addLight( new QuadLight( Vec3f( 1, 10, 2 ), Vec3f( -2, 0, 0 ), Vec3f( 0, 0, 2 ), WHITE, 40.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
