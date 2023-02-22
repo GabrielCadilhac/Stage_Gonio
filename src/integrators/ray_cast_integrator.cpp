@@ -8,15 +8,12 @@ namespace RT_ISICG
 								 const float   p_tMax ) const
 	{
 		HitRecord hitRecord;
-		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
-		{
-			float angle = glm::dot( -p_ray.getDirection(), hitRecord._normal);
-			angle		= std::max( angle, 0.f );
-			return hitRecord._object->getMaterial()->getFlatColor() * angle;
-		}
-		else
-		{
+
+		if ( !p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
 			return _backgroundColor;
-		}
+
+		const float cosTheta = std::max( glm::dot( -p_ray.getDirection(), hitRecord._normal ), 0.f );
+		return hitRecord._object->getMaterial()->getFlatColor() * cosTheta;
+
 	}
 } // namespace RT_ISICG

@@ -28,7 +28,8 @@ namespace RT_ISICG
 
 		if ( _geometry.intersect( p_ray, t ) )
 		{
-			if ( t > p_tMax || t < p_tMin ) { return false; };
+			if ( t > p_tMax || t < p_tMin )
+				return false;
 
 			return true;
 		}

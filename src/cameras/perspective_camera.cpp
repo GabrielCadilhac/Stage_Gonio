@@ -24,8 +24,8 @@ namespace RT_ISICG
 
 	void PerspectiveCamera::_updateViewport()
 	{
-		float height = 2.f * std::max(glm::tan( glm::radians( _fovy / 2.f ) ), 0.f) * _focalDistance;
-		float width	 = height * _aspectRatio;
+		const float height = 2.f * std::max(glm::tan( glm::radians( _fovy / 2.f ) ), 0.f) * _focalDistance;
+		const float width  = height * _aspectRatio;
 
 		_viewportU = _u * width;
 		_viewportV = _v * height;

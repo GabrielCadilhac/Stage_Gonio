@@ -116,6 +116,9 @@
     <ClCompile Include="src\integrators\direct_lighting_integrator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\lights\quad_light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\defines.hpp">
@@ -212,6 +215,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\integrators\direct_lighting_integrator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lights\quad_light.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

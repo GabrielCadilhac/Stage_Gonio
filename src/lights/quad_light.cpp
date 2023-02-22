@@ -4,15 +4,15 @@ namespace RT_ISICG
 {
 	LightSample QuadLight::sample( const Vec3f & p_point ) const
 	{
-		Vec3f randomPos    = _position + randomFloat() * _u + randomFloat() * _v;
+		const Vec3f randomPos = _position + randomFloat() * _u + randomFloat() * _v;
 
-		Vec3f rayDirection = randomPos - p_point;
-		float distance	   = glm::distance( randomPos, p_point );
-		rayDirection	   = glm::normalize( rayDirection );
+		Vec3f rayDirection   = randomPos - p_point;
+		const float distance = glm::distance( randomPos, p_point );
+		rayDirection	     = glm::normalize( rayDirection );
 
-		float cosAngle	   = glm::dot( _n, rayDirection );
-		float invArea	   = 1.f / _area;
-		float newPDF	   = invArea * ( ( distance * distance ) / cosAngle );
+		const float cosAngle   = glm::dot( _n, rayDirection );
+		const float invArea	   = 1.f / _area;
+		const float newPDF	   = invArea * ( ( distance * distance ) / cosAngle );
 
 		return LightSample( rayDirection, distance, ( _color * _power ) / newPDF, newPDF );
 	}

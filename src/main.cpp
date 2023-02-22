@@ -23,7 +23,7 @@ namespace RT_ISICG
 		// Create a perspective camera.
 		//PerspectiveCamera camera( aspectRatio );
 
-		//Nouvelle caméra avec le repère modifié (Figure 5.d)
+		//Nouvelle caméra avec le repère modifié (Figure 5.a)
 		PerspectiveCamera camera( cameraPosition, cameraLookAt, Vec3f(0.f, 1.f, 0.f), 60.f, aspectRatio );
 
 		// Create and setup the renderer.
@@ -31,6 +31,7 @@ namespace RT_ISICG
 		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );
 		renderer.setBackgroundColor( GREY );
 		renderer.setNbPixelSamples( 4 );
+		renderer.setNbLightSamples( 16 );
 
 		// Launch rendering.
 		std::cout << "Rendering..." << std::endl;

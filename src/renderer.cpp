@@ -40,8 +40,8 @@ namespace RT_ISICG
 		const int width	 = p_texture.getWidth();
 		const int height = p_texture.getHeight();
 
-		const int distMin = 0.1f;
-		const int distMax = 100.f;
+		const float distMin = 0.1f;
+		const float distMax = 100.f;
 
 		Chrono			   chrono;
 		ConsoleProgressBar progressBar;
@@ -60,7 +60,12 @@ namespace RT_ISICG
 			#pragma omp parallel for
 			for ( int i = 0; i < width; i++ )
 			{
-				//Ray ray = p_camera->generateRay(sx,sy);
+				/* On ne génère plus un seul rayon par pixel mais plusieurs, dans la boucle d'anti-aliasing
+				const float sx = ( i + 0.5f ) * pixelWidth;
+				const float sy = ( j + 0.5f ) * pixelHeight;
+				const Ray ray = p_camera->generateRay(sx,sy);
+				const Vec3f couleur = _integrator->Li( p_scene, ray, distMin, distMax );
+				*/
 
 				// Image Figure 1.a
 				//p_texture.setPixel( i, j, Vec3f( sx, sy, 0.f ) );
@@ -74,19 +79,19 @@ namespace RT_ISICG
 				
 				// Anti-Aliasing
 				Vec3f couleur = VEC3F_ZERO;
-				_integrator->setNbLightSamples( 4 );
 
-				for (int k = 0; k < _nbPixelSamples; ++k)
+				for (unsigned int k = 0; k < _nbPixelSamples; ++k)
 				{
 					const float sx = ( i + randomFloat() ) * pixelWidth;
 					const float sy = ( j + randomFloat() ) * pixelHeight;
 
-					const Ray	 ray  = p_camera->generateRay( sx, sy );
+					const Ray ray  = p_camera->generateRay( sx, sy );
 					couleur += _integrator->Li( p_scene, ray, distMin, distMax );
 				}
 
 				couleur /= _nbPixelSamples;
-				couleur = glm::clamp( couleur, 0.f, 1.f );
+				couleur  = glm::clamp( couleur, 0.f, 1.f );
+				
 				p_texture.setPixel( i, j, couleur );
 				
 			}
