@@ -40,7 +40,32 @@ namespace RT_ISICG
 						 const unsigned int p_lastTriangleId,
 						 const unsigned int p_depth )
 	{
-		/// TODO
+
+		for ( size_t i = p_firstTriangleId; i < p_lastTriangleId; i++ )
+		{
+			const TriangleMeshGeometry tr = _triangles->at( i );
+			p_node->_aabb.extend(tr.getVertex0());
+			p_node->_aabb.extend(tr.getVertex1());
+			p_node->_aabb.extend(tr.getVertex2());
+		}
+
+		int nbTriangles = ( p_lastTriangleId - p_firstTriangleId );
+
+		if (nbTriangles < _maxTrianglesPerLeaf || p_depth > _maxDepth)
+		{
+			size_t largestAxis = p_node->_aabb.largestAxis();
+			Vec3f  centre	   = p_node->_aabb.centroid();
+			float  milieu	   = -1.f;
+
+			if ( largestAxis == 0 )
+				milieu = centre.x;
+			else if ( largestAxis == 1 )
+				milieu = centre.y;
+			else
+				milieu = centre.z;
+
+
+		}
 	}
 
 	bool BVH::_intersectRec( const BVHNode * p_node,
@@ -59,5 +84,16 @@ namespace RT_ISICG
 	{
 		/// TODO
 		return false;
+	}
+
+	void BVH::_partition( const size_t		 p_axePartition,
+						  const float		 p_milieu,
+						  const unsigned int p_firstTriangleId,
+						  const unsigned int p_lastTriangleId ) const
+	{
+		for (size_t i = p_firstTriangleId; i < p_lastTriangleId; i++)
+		{
+			const TriangleMeshGeometry tr = _triangles->at( i );
+		}
 	}
 } // namespace RT_ISICG

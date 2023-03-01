@@ -57,6 +57,11 @@ namespace RT_ISICG
 							   const float	   p_tMin,
 							   const float	   p_tMax ) const;
 
+		void _partition( const size_t		p_axePartition,
+						 const float		p_milieu,
+						 const unsigned int p_firstTriangleId,
+						 const unsigned int p_lastTriangleId ) const;
+
 	  private:
 		std::vector<TriangleMeshGeometry> * _triangles = nullptr;
 		BVHNode *							_root	   = nullptr;

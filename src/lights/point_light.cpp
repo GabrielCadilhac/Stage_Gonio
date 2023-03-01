@@ -5,7 +5,7 @@ namespace RT_ISICG
 	LightSample PointLight::sample(const Vec3f & p_point) const
 	{
 		Vec3f direction = _position - p_point;
-		const float distance = glm::distance( _position, p_point );
+		const float distance = glm::length( direction );
 		direction		= glm::normalize( direction );
 
 		const Vec3f radiance = _color * _power * ( 1 / ( distance * distance ) );

@@ -18,7 +18,6 @@ namespace RT_ISICG
 
 			return true;
 		}
-
 		return false;
 	}
 
@@ -27,13 +26,7 @@ namespace RT_ISICG
 		float t;
 
 		if ( _geometry.intersect( p_ray, t ) )
-		{
-			if ( t > p_tMax || t < p_tMin )
-				return false;
-
-			return true;
-		}
-
+			return ( t <= p_tMax && t >= p_tMin );
 		return false;
 	}
 }

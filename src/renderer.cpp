@@ -57,7 +57,6 @@ namespace RT_ISICG
 		#pragma omp parallel for
 		for ( int j = 0; j < height; j++ )
 		{
-			#pragma omp parallel for
 			for ( int i = 0; i < width; i++ )
 			{
 				/* On ne génère plus un seul rayon par pixel mais plusieurs, dans la boucle d'anti-aliasing
@@ -80,7 +79,7 @@ namespace RT_ISICG
 				// Anti-Aliasing
 				Vec3f couleur = VEC3F_ZERO;
 
-				for (unsigned int k = 0; k < _nbPixelSamples; ++k)
+				for (int k = 0; k < _nbPixelSamples; ++k)
 				{
 					const float sx = ( i + randomFloat() ) * pixelWidth;
 					const float sy = ( j + randomFloat() ) * pixelHeight;

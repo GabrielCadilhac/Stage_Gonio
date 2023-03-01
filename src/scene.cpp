@@ -1,5 +1,6 @@
 #include "scene.hpp"
 #include "materials/color_material.hpp"
+#include "materials/lambert_material.hpp"
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "lights/point_light.hpp"
@@ -46,6 +47,53 @@ namespace RT_ISICG
 		// Add lights.
 		//_addLight( new PointLight( Vec3f( 1, 10, 1 ), WHITE, 100 ) );
 		_addLight( new QuadLight( Vec3f( 1, 10, 2 ), Vec3f( -2, 0, 0 ), Vec3f( 0, 0, 2 ), WHITE, 40.f ) );
+	}
+
+
+	void Scene::init_tp4()
+	{
+		const std::string DATA_PATH = "./data/";
+
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = Add materials . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = = = = = = = = = = =
+		_addMaterial( new ColorMaterial( "RedLambert", RED ) );
+		_addMaterial( new ColorMaterial( "GreenLambert", GREEN ) );
+		_addMaterial( new ColorMaterial( "BlueLambert", BLUE ) );
+		_addMaterial( new ColorMaterial( "GreyLambert", GREY ) );
+		_addMaterial( new ColorMaterial( "MagentaLambert", MAGENTA ) );
+		_addMaterial( new ColorMaterial( "YellowLambert", YELLOW ) );
+		_addMaterial( new ColorMaterial( "CyanLambert", CYAN ) );
+
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = Add objects . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = = = = = = = = = = OBJ .
+		loadFileTriangleMesh( "UVsphere", DATA_PATH + "uvsphere.obj" );
+		_attachMaterialToObject( "CyanLambert", "UVsphere_defaultobject" );
+
+		// Pseudo Cornell box made with infinite planes .
+		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
+		_attachMaterialToObject( "GreyLambert", "PlaneGround" );
+
+		_addObject( new Plane( "PlaneLeft", Vec3f( 5.f, 0.f, 0.f ), Vec3f( -1.f, 0.f, 0.f ) ) );
+		_attachMaterialToObject( "RedLambert", "PlaneLeft" );
+
+		_addObject( new Plane( "PlaneCeiling", Vec3f( 0.f, 7.f, 0.f ), Vec3f( 0.f, -1.f, 0.f ) ) );
+		_attachMaterialToObject( "GreenLambert", "PlaneCeiling" );
+
+		_addObject( new Plane( "PlaneRight", Vec3f( -5.f, 0.f, 0.f ), Vec3f( 1.f, 0.f, 0.f ) ) );
+		_attachMaterialToObject( "BlueLambert", "PlaneRight" );
+
+		_addObject( new Plane( "PlaneFront", Vec3f( 0.f, 0.f, 10.f ), Vec3f( 0.f, 0.f, -1.f ) ) );
+		_attachMaterialToObject( "MagentaLambert", "PlaneFront" );
+
+		_addObject( new Plane( "PlaneRear", Vec3f( 0.f, 0.f, -10.f ), Vec3f( 0.f, 0.f, 1.f ) ) );
+		_attachMaterialToObject( "YellowLambert", "PlaneRear" );
+
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = Add lights . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = = = = = = = = = =
+		_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
@@ -111,8 +159,8 @@ namespace RT_ISICG
 				aiString mtlName;
 				mtl->Get( AI_MATKEY_NAME, mtlName );
 
-				//_addMaterial( new PlasticMaterial( std::string( mtlName.C_Str() ), kd, ks, s ) );
-				//_attachMaterialToObject( mtlName.C_Str(), meshName );
+				_addMaterial( new ColorMaterial( std::string( mtlName.C_Str() ), kd) );
+				_attachMaterialToObject( mtlName.C_Str(), meshName );
 			}
 
 			std::cout << "-- [DONE] " << triMesh->getNbTriangles() << " triangles, " << triMesh->getNbVertices()

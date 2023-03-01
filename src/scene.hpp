@@ -24,6 +24,8 @@ namespace RT_ISICG
 
 		// Hard coded initialization.
 		void init();
+		void init_tp1();
+		void init_tp4();
 
 		// Initialization from file.
 		void init( const std::string & p_path ) { throw std::exception( "Not implemented !" ); }
