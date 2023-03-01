@@ -4,6 +4,7 @@
 #include "aabb.hpp"
 #include "hit_record.hpp"
 #include <vector>
+#include <algorithm>
 
 namespace RT_ISICG
 {
@@ -65,6 +66,7 @@ namespace RT_ISICG
 	  private:
 		std::vector<TriangleMeshGeometry> * _triangles = nullptr;
 		BVHNode *							_root	   = nullptr;
+		AABB								_aabb;
 
 		const unsigned int _maxTrianglesPerLeaf = 8;
 		const unsigned int _maxDepth			= 32;

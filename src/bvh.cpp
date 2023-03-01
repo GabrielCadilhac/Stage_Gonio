@@ -43,28 +43,35 @@ namespace RT_ISICG
 
 		for ( size_t i = p_firstTriangleId; i < p_lastTriangleId; i++ )
 		{
-			const TriangleMeshGeometry tr = _triangles->at( i );
-			p_node->_aabb.extend(tr.getVertex0());
-			p_node->_aabb.extend(tr.getVertex1());
-			p_node->_aabb.extend(tr.getVertex2());
+			const AABB aabb = ( *_triangles )[ i ].getAABB();
+			_aabb.extend(aabb);
 		}
 
-		int nbTriangles = ( p_lastTriangleId - p_firstTriangleId );
+		const unsigned int nbTriangles = ( p_lastTriangleId - p_firstTriangleId );
 
 		if (nbTriangles < _maxTrianglesPerLeaf || p_depth > _maxDepth)
 		{
-			size_t largestAxis = p_node->_aabb.largestAxis();
-			Vec3f  centre	   = p_node->_aabb.centroid();
-			float  milieu	   = -1.f;
+			const size_t largestAxis = p_node->_aabb.largestAxis();
+			const Vec3f  centre	   = p_node->_aabb.centroid();
+			const float  milieu	   = centre[ largestAxis ];
 
-			if ( largestAxis == 0 )
-				milieu = centre.x;
-			else if ( largestAxis == 1 )
-				milieu = centre.y;
-			else
-				milieu = centre.z;
+			//if ( largestAxis == 0 )
+			//	milieu = centre.x;
+			//else if ( largestAxis == 1 )
+			//	milieu = centre.y;
+			//else
+			//	milieu = centre.z;
 
+			std::vector<TriangleMeshGeometry>::iterator pt
+				= std::partition( _triangles->begin(),
+								  _triangles->end(),
+								  [ milieu, largestAxis ]( TriangleMeshGeometry triangle )
+				{
+					return triangle.distance( milieu, largestAxis ) < 0;
+				} );
 
+			_buildRec(p_node->_left, p_firstTriangleId, pt - _triangles->begin(), p_depth+1 );
+			_buildRec(p_node->_right, pt - _triangles->begin(), p_lastTriangleId, p_depth+1 );
 		}
 	}
 
@@ -74,7 +81,43 @@ namespace RT_ISICG
 							 const float	 p_tMax,
 							 HitRecord &	 p_hitRecord ) const
 	{
-		/// TODO
+		if ( p_node->isLeaf() ) 
+		{
+			if ( !p_node->_aabb.intersect( p_ray, p_tMin, p_tMax ) ) return false;
+
+			float  tClosest = p_tMax;
+			size_t hitTri	= (* _triangles).size();
+			Vec3f  normal	= VEC3F_ZERO;
+
+			for ( size_t i = 0; i < (*_triangles).size(); i++ )
+			{
+				float t;
+				Vec3f n;
+
+				if ( (*_triangles)[ i ].intersect( p_ray, t, n ) )
+				{
+					if ( t >= p_tMin && t <= tClosest )
+					{
+						tClosest = t;
+						hitTri	 = i;
+						normal	 = n;
+					}
+				}
+				if ( hitTri != (* _triangles).size() ) // Intersection found.
+				{
+					p_hitRecord._point	= p_ray.pointAtT( tClosest );
+					p_hitRecord._normal = normal;
+					p_hitRecord.faceNormal( p_ray.getDirection() );
+					p_hitRecord._distance = tClosest;
+					p_hitRecord._object	  = ( *_triangles )[0];
+
+					return true;
+				}
+			}
+			return false;
+		}
+		
+
 		return false;
 	}
 	bool BVH::_intersectAnyRec( const BVHNode * p_node,

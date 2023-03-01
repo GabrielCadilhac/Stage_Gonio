@@ -11,6 +11,9 @@ namespace RT_ISICG
 	{
 		_faceNormal = glm::normalize( glm::cross( _refMesh->_vertices[ p_v1 ] - _refMesh->_vertices[ p_v0 ],
 												  _refMesh->_vertices[ p_v2 ] - _refMesh->_vertices[ p_v0 ] ) );
+		_aabb.extend( _refMesh->_vertices[ _v0 ] );
+		_aabb.extend( _refMesh->_vertices[ _v1 ] );
+		_aabb.extend( _refMesh->_vertices[ _v2 ] );
 	}
 
 	bool TriangleMeshGeometry::intersect( const Ray & p_ray, float & p_t, Vec3f & p_normal ) const
@@ -26,8 +29,8 @@ namespace RT_ISICG
 
 		const double EPSILON = 0.0001f;
 
-		const Vec3f edge1 = v1 - v0;
-		const Vec3f edge2 = v2 - v0;
+		const Vec3f edge1(v1 - v0);
+		const Vec3f edge2(v2 - v0);
 		const Vec3f pVec  = glm::cross( d, edge2 );
 		const float det   = glm::dot( edge1, pVec );
 
@@ -55,6 +58,16 @@ namespace RT_ISICG
 		p_normal = glm::normalize(( 1 - u - v ) * n0 + ( u * n1 ) + ( v * n2 ));
 
 		return true;
+	}
+
+	const float TriangleMeshGeometry::distance( const float p_point, const unsigned int p_axis )
+	{
+		if ( p_axis == 0 )
+			return _v0 - p_point;
+		else if ( p_axis == 1 )
+			return _v1 - p_point;
+		
+		return _v2 - p_point;
 	}
 
 } // namespace RT_ISICG

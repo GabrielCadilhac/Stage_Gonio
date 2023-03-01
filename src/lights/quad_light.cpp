@@ -7,7 +7,7 @@ namespace RT_ISICG
 		const Vec3f randomPos = _position + randomFloat() * _u + randomFloat() * _v;
 
 		Vec3f rayDirection   = randomPos - p_point;
-		const float distance = glm::distance( randomPos, p_point );
+		const float distance = glm::length( rayDirection );
 		rayDirection	     = glm::normalize( rayDirection );
 
 		const float cosAngle   = glm::dot( _n, rayDirection );
