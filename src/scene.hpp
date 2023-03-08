@@ -25,6 +25,8 @@ namespace RT_ISICG
 		// Hard coded initialization.
 		void init();
 		void init_tp1();
+		void init_tp2();
+		void init_tp3();
 		void init_tp4();
 
 		// Initialization from file.

@@ -18,6 +18,8 @@ namespace RT_ISICG
 
 		// Create and init scene.
 		Scene scene;
+
+		// Changer le .init_tp en fonction du numéro du tp souhaité
 		scene.init_tp4();
 
 		// Create a perspective camera.

@@ -23,6 +23,7 @@ namespace RT_ISICG
 
 		inline const Vec3f & getFaceNormal() const { return _faceNormal; };
 		inline const AABB  & getAABB() const { return _aabb; };
+		inline MeshTriangle * getRefMesh() const { return _refMesh; };
 		const float			 distance( const float p_point, const unsigned int p_axis );
 
 	  private:
@@ -37,7 +38,7 @@ namespace RT_ISICG
 		};
 
 		Vec3f _faceNormal;
-		AABB  _aabb;
+		AABB  _aabb = AABB(VEC3F_ZERO, VEC3F_ZERO);
 	};
 } // namespace RT_ISICG
 

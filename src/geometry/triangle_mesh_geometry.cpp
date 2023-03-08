@@ -11,7 +11,7 @@ namespace RT_ISICG
 	{
 		_faceNormal = glm::normalize( glm::cross( _refMesh->_vertices[ p_v1 ] - _refMesh->_vertices[ p_v0 ],
 												  _refMesh->_vertices[ p_v2 ] - _refMesh->_vertices[ p_v0 ] ) );
-		_aabb.extend( _refMesh->_vertices[ _v0 ] );
+		_aabb		= AABB( _refMesh->_vertices[ _v0 ], _refMesh->_vertices[ _v0 ] );
 		_aabb.extend( _refMesh->_vertices[ _v1 ] );
 		_aabb.extend( _refMesh->_vertices[ _v2 ] );
 	}
@@ -62,12 +62,13 @@ namespace RT_ISICG
 
 	const float TriangleMeshGeometry::distance( const float p_point, const unsigned int p_axis )
 	{
-		if ( p_axis == 0 )
-			return _v0 - p_point;
-		else if ( p_axis == 1 )
-			return _v1 - p_point;
-		
-		return _v2 - p_point;
+		const Vec3f & vert0 = _refMesh->_vertices[ _v0 ];
+		const Vec3f & vert1 = _refMesh->_vertices[ _v1 ];
+		const Vec3f & vert2 = _refMesh->_vertices[ _v2 ];
+
+		const Vec3f center = ( vert0 + vert1 + vert2 ) / 3.f;
+
+		return center[ p_axis ] - p_point;
 	}
 
 } // namespace RT_ISICG
