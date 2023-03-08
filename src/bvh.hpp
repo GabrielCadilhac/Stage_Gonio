@@ -20,7 +20,7 @@ namespace RT_ISICG
 		}
 		bool isLeaf() const { return ( _left == nullptr && _right == nullptr ); }
 
-		AABB		 _aabb			  = AABB( Vec3f( 0.f ), Vec3f( 0.f ) );
+		AABB		 _aabb			  = AABB( VEC3F_ZERO, VEC3F_ZERO );
 		BVHNode *	 _left			  = nullptr;
 		BVHNode *	 _right			  = nullptr;
 		unsigned int _firstTriangleId = 0;
@@ -60,7 +60,6 @@ namespace RT_ISICG
 	  private:
 		std::vector<TriangleMeshGeometry> * _triangles = nullptr;
 		BVHNode *							_root	   = nullptr;
-		AABB								_aabb	   = AABB( Vec3f(0.f), Vec3f(0.f) );
 
 		const unsigned int _maxTrianglesPerLeaf = 8;
 		const unsigned int _maxDepth			= 32;

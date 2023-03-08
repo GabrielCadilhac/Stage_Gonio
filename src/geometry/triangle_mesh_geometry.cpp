@@ -27,14 +27,12 @@ namespace RT_ISICG
 		p_t = -1;
 		p_normal = VEC3F_ZERO;
 
-		const double EPSILON = 0.0001f;
-
 		const Vec3f edge1(v1 - v0);
 		const Vec3f edge2(v2 - v0);
 		const Vec3f pVec  = glm::cross( d, edge2 );
 		const float det   = glm::dot( edge1, pVec );
 
-		if ( det > -EPSILON && det < EPSILON ) return false;
+		if ( det > -FLT_EPSILON && det < FLT_EPSILON ) return false;
 
 		const double invDet = 1.0 / det;
 
@@ -58,17 +56,6 @@ namespace RT_ISICG
 		p_normal = glm::normalize(( 1 - u - v ) * n0 + ( u * n1 ) + ( v * n2 ));
 
 		return true;
-	}
-
-	const float TriangleMeshGeometry::distance( const float p_point, const unsigned int p_axis )
-	{
-		const Vec3f & vert0 = _refMesh->_vertices[ _v0 ];
-		const Vec3f & vert1 = _refMesh->_vertices[ _v1 ];
-		const Vec3f & vert2 = _refMesh->_vertices[ _v2 ];
-
-		const Vec3f center = ( vert0 + vert1 + vert2 ) / 3.f;
-
-		return center[ p_axis ] - p_point;
 	}
 
 } // namespace RT_ISICG

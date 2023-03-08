@@ -24,7 +24,6 @@ namespace RT_ISICG
 		inline const Vec3f & getFaceNormal() const { return _faceNormal; };
 		inline const AABB  & getAABB() const { return _aabb; };
 		inline MeshTriangle * getRefMesh() const { return _refMesh; };
-		const float			 distance( const float p_point, const unsigned int p_axis );
 
 	  private:
 		MeshTriangle * _refMesh;

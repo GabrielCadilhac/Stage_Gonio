@@ -21,6 +21,7 @@ namespace RT_ISICG
 													 const HitRecord & p_hitRecord ) const
 	{
 		Vec3f color = VEC3F_ZERO;
+		Vec3f colorMaterial = p_hitRecord._object->getMaterial()->getFlatColor();
 		for ( BaseLight * light : p_scene.getLights() )
 		{
 			unsigned int _nbShadowSamples = 1;
@@ -35,7 +36,7 @@ namespace RT_ISICG
 				if ( !p_scene.intersectAny( shadowRay, 0, lightSample._distance ) )
 				{
 					const float cosTheta = std::max( glm::dot( p_hitRecord._normal, lightSample._direction ), 0.f );
-					color += p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+					color += colorMaterial * lightSample._radiance * cosTheta;
 				}
 			}
 		}
