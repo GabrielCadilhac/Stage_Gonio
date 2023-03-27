@@ -87,6 +87,9 @@ namespace RT_ISICG
 			size_t hitTri	= _triangles->size();
 			Vec3f  normal	= VEC3F_ZERO;
 
+			if (p_hitRecord._distance != 0.f)
+				tClosest = p_hitRecord._distance;
+
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; ++i )
 			{
 				float t;
@@ -117,8 +120,8 @@ namespace RT_ISICG
 			return false;
 		}
 
-		bool intersectedLeft  = ( _intersectRec( p_node->_left, p_ray, p_tMin, p_tMax, p_hitRecord ) );
-		bool intersectedRight = ( _intersectRec( p_node->_right, p_ray, p_tMin, p_tMax, p_hitRecord ) );
+		bool intersectedLeft  = _intersectRec( p_node->_left , p_ray, p_tMin, p_tMax, p_hitRecord );
+		bool intersectedRight = _intersectRec( p_node->_right, p_ray, p_tMin, p_tMax, p_hitRecord );
 
 		return intersectedLeft || intersectedRight;
 	}
