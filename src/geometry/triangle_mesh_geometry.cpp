@@ -16,7 +16,7 @@ namespace RT_ISICG
 		_aabb.extend( _refMesh->_vertices[ _v2 ] );
 	}
 
-	bool TriangleMeshGeometry::intersect( const Ray & p_ray, float & p_t, Vec3f & p_normal ) const
+	bool TriangleMeshGeometry::intersect( const Ray & p_ray, float & p_t, float p_u, float p_v ) const
 	{
 		const Vec3f & o	 = p_ray.getOrigin();
 		const Vec3f & d	 = p_ray.getDirection();
@@ -25,7 +25,6 @@ namespace RT_ISICG
 		const Vec3f & v2 = _refMesh->_vertices[ _v2 ];
 
 		p_t = -1;
-		p_normal = VEC3F_ZERO;
 
 		const Vec3f edge1(v1 - v0);
 		const Vec3f edge2(v2 - v0);
@@ -34,28 +33,31 @@ namespace RT_ISICG
 
 		if ( det > -FLT_EPSILON && det < FLT_EPSILON ) return false;
 
-		const double invDet = 1.0 / det;
+		const float invDet = 1.0 / det;
 
 		// Check if the intersection if on the triangle (x axis)
-		const Vec3f tVec = o - v0;
+		const Vec3f tVec(o - v0);
 		const float u    = glm::dot( tVec, pVec ) * static_cast<float>(invDet);
 		if ( u < 0.f || u > 1.f ) return false;
 
 		// Check if the intersection if on the triangle (y axis)
-		const Vec3f qVec = glm::cross( tVec, edge1 );
+		const Vec3f qVec(glm::cross( tVec, edge1 ));
 		const float v	 = glm::dot( d, qVec ) * static_cast<float>(invDet);
 		if ( v < 0.f || u + v > 1.f ) return false;
 
 		// If yes, we can compute distance to the triangle and return true
-		const Vec3f & n0 = _refMesh->_normals[ _v0 ];
-		const Vec3f & n1 = _refMesh->_normals[ _v1 ];
-		const Vec3f & n2 = _refMesh->_normals[ _v2 ];
+		p_u = u;
+		p_v = v;
 
-		p_t = glm::dot( edge2, qVec ) * static_cast<float>(invDet);
-
-		p_normal = glm::normalize(( 1 - u - v ) * n0 + ( u * n1 ) + ( v * n2 ));
+		p_t = glm::dot( edge2, qVec ) * invDet;
 
 		return true;
+	}
+
+	const Vec3f TriangleMeshGeometry::getInterNormal( const float p_u, const float p_v ) const
+	{
+		return glm::normalize( ( 1 - p_u - p_v ) * _refMesh->_normals[ _v0 ] + ( p_u * _refMesh->_normals[ _v1 ] )
+							   + ( p_v * _refMesh->_normals[ _v2 ] ) );
 	}
 
 } // namespace RT_ISICG

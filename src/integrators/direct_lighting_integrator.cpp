@@ -9,11 +9,8 @@ namespace RT_ISICG
 	{
 		HitRecord hitRecord;
 		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
-		{
-			Vec3f color = _directLighting( p_scene, hitRecord );
+			return _directLighting( p_scene, hitRecord );
 
-			return color / static_cast<float>( _nbLightSamples );
-		}
 		return _backgroundColor;
 	}
 
@@ -24,9 +21,10 @@ namespace RT_ISICG
 		Vec3f colorMaterial = p_hitRecord._object->getMaterial()->getFlatColor();
 		for ( BaseLight * light : p_scene.getLights() )
 		{
-			unsigned int _nbShadowSamples = 1;
+			Vec3f		 tempColor = VEC3F_ZERO;
+			float _nbShadowSamples = 1;
 
-			if ( light->getIsSurface() ) _nbShadowSamples = _nbLightSamples;
+			if ( light->getIsSurface() ) _nbShadowSamples = static_cast<float>(_nbLightSamples);
 
 			for ( unsigned int i = 0; i < _nbShadowSamples; ++i )
 			{
@@ -36,10 +34,11 @@ namespace RT_ISICG
 				if ( !p_scene.intersectAny( shadowRay, 0, lightSample._distance ) )
 				{
 					const float cosTheta = std::max( glm::dot( p_hitRecord._normal, lightSample._direction ), 0.f );
-					color += colorMaterial * lightSample._radiance * cosTheta;
+					tempColor += colorMaterial * lightSample._radiance * cosTheta;
 				}
 			}
+			color += ( tempColor / _nbShadowSamples );
 		}
-		return color;
+		return color / static_cast<float>(p_scene.getLights().size());
 	}
 } // namespace RT_ISICG

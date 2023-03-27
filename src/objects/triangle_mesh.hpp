@@ -23,9 +23,7 @@ namespace RT_ISICG
 
 		inline void addTriangle( const unsigned int p_v0, const unsigned int p_v1, const unsigned int p_v2 )
 		{
-			TriangleMeshGeometry triangle( p_v0, p_v1, p_v2, this );
-			_triangles.emplace_back( triangle );
-			_aabb.extend( triangle.getAABB() );
+			_triangles.emplace_back( TriangleMeshGeometry( p_v0, p_v1, p_v2, this ) );
 		};
 		inline void addVertex( const float p_x, const float p_y, const float p_z )
 		{
@@ -37,7 +35,8 @@ namespace RT_ISICG
 		}
 		inline void addUV( const float p_u, const float p_v ) { _uvs.emplace_back( p_u, p_v ); }
 
-		inline void buildBVH() { _bvh.build( &_triangles ); };
+		inline void buildBVH() { _bvh.build( &_triangles ); }
+
 		// Check for nearest intersection between p_tMin and p_tMax : if found fill p_hitRecord.
 		bool intersect( const Ray & p_ray,
 						const float p_tMin,
@@ -52,7 +51,6 @@ namespace RT_ISICG
 		std::vector<Vec3f>				  _normals;
 		std::vector<Vec2f>				  _uvs;
 		std::vector<TriangleMeshGeometry> _triangles;
-		AABB							  _aabb;
 		BVH								  _bvh;
 	};
 } // namespace RT_ISICG

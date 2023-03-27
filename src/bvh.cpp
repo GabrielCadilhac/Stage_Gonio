@@ -53,7 +53,7 @@ namespace RT_ISICG
 
 		if ( nbTriangles > _maxTrianglesPerLeaf && p_depth < _maxDepth )
 		{
-			const unsigned int axePartition = static_cast<int>(p_node->_aabb.largestAxis());
+			const size_t axePartition = p_node->_aabb.largestAxis();
 			const Vec3f centre  = p_node->_aabb.centroid();
 			const float milieu	= centre[ axePartition ];
 
@@ -84,8 +84,9 @@ namespace RT_ISICG
 		if ( p_node->isLeaf() )
 		{
 			float  tClosest = p_tMax;
-			size_t hitTri	= _triangles->size();
-			Vec3f  normal	= VEC3F_ZERO;
+			float  uClosest = p_tMax;
+			float  vClosest = p_tMax;
+			size_t hitTri	= p_node->_lastTriangleId;
 
 			if (p_hitRecord._distance != 0.f)
 				tClosest = p_hitRecord._distance;
@@ -93,23 +94,25 @@ namespace RT_ISICG
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; ++i )
 			{
 				float t;
-				Vec3f n;
+				float u = 0;
+				float v = 0;
 
-				if ( (*_triangles)[ i ].intersect( p_ray, t, n ) )
+				if ( (*_triangles)[ i ].intersect( p_ray, t, u, v ) )
 				{
 					if ( t >= p_tMin && t <= tClosest )
 					{
 						tClosest = t;
 						hitTri	 = i;
-						normal	 = n;
+						uClosest = u;
+						vClosest = v;
 					}
 				}
 			}
 
-			if ( hitTri != _triangles->size() )
+			if ( hitTri != p_node->_lastTriangleId )
 			{
 				p_hitRecord._point	= p_ray.pointAtT( tClosest );
-				p_hitRecord._normal = normal;
+				p_hitRecord._normal = ( *_triangles )[ hitTri ].getInterNormal( uClosest, vClosest );
 				p_hitRecord.faceNormal( p_ray.getDirection() );
 				p_hitRecord._distance = tClosest;
 				p_hitRecord._object	  = ( *_triangles )[ 0 ].getRefMesh();
@@ -138,8 +141,9 @@ namespace RT_ISICG
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; i++ )
 			{
 				float t;
-				Vec3f normal;
-				if ( (*_triangles)[ i ].intersect( p_ray, t, normal ) )
+				float u = 0;
+				float v = 0;
+				if ( (*_triangles)[ i ].intersect( p_ray, t, u, v ) )
 				{
 					if ( t >= p_tMin && t <= p_tMax ) return true;
 				}

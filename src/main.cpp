@@ -32,8 +32,8 @@ namespace RT_ISICG
 		Renderer renderer;
 		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );
 		renderer.setBackgroundColor( GREY );
-		renderer.setNbPixelSamples( 1 );
-		renderer.setNbLightSamples( 1 );
+		renderer.setNbPixelSamples( 8 );
+		renderer.setNbLightSamples( 20 );
 
 		// Launch rendering.
 		std::cout << "Rendering..." << std::endl;

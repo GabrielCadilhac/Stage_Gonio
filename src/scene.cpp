@@ -121,8 +121,10 @@ namespace RT_ISICG
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = Add lights . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = = = = = = = = = = = = = =
-		_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
+		//_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
 		//_addLight( new QuadLight( Vec3f( 900, 600, -300 ), Vec3f( -800, 0, 0 ), Vec3f( 0, 0, 300 ), WHITE, 20.f ) );
+		_addLight( new QuadLight(
+			Vec3f( -1.5f, 6.9f, 2.0f ), Vec3f( 3.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -4.f ), WHITE, 40.0f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

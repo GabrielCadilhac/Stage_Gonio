@@ -20,7 +20,7 @@ namespace RT_ISICG
 		}
 		bool isLeaf() const { return ( _left == nullptr && _right == nullptr ); }
 
-		AABB		 _aabb			  = AABB( VEC3F_ZERO, VEC3F_ZERO );
+		AABB		 _aabb;
 		BVHNode *	 _left			  = nullptr;
 		BVHNode *	 _right			  = nullptr;
 		unsigned int _firstTriangleId = 0;
