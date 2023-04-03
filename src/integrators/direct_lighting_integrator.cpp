@@ -9,16 +9,15 @@ namespace RT_ISICG
 	{
 		HitRecord hitRecord;
 		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
-			return _directLighting( p_scene, hitRecord );
+			return _directLighting( p_scene, hitRecord, p_ray );
 
 		return _backgroundColor;
 	}
 
 	Vec3f DirectLightingIntegrator::_directLighting( const Scene &	   p_scene,
-													 const HitRecord & p_hitRecord ) const
+													 const HitRecord & p_hitRecord, const Ray & p_ray ) const
 	{
 		Vec3f color = VEC3F_ZERO;
-		Vec3f colorMaterial = p_hitRecord._object->getMaterial()->getFlatColor();
 		for ( BaseLight * light : p_scene.getLights() )
 		{
 			Vec3f		 tempColor = VEC3F_ZERO;
@@ -31,6 +30,8 @@ namespace RT_ISICG
 				const LightSample lightSample = light->sample( p_hitRecord._point );
 				Ray				  shadowRay( p_hitRecord._point, lightSample._direction );
 				shadowRay.offset( p_hitRecord._normal );
+
+				Vec3f colorMaterial = p_hitRecord._object->getMaterial()->shade( p_ray, p_hitRecord, lightSample );
 				if ( !p_scene.intersectAny( shadowRay, 0, lightSample._distance ) )
 				{
 					const float cosTheta = std::max( glm::dot( p_hitRecord._normal, lightSample._direction ), 0.f );

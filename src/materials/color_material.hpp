@@ -23,7 +23,7 @@ namespace RT_ISICG
 		inline const Vec3f & getFlatColor() const override { return _color; }
 
 	  protected:
-		Vec3f _color = Vec3f( 1.f, 1.f, 1.f );
+		Vec3f _color = Vec3f( 1.f );
 	};
 
 } // namespace RT_ISICG

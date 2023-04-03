@@ -1,6 +1,9 @@
 #include "scene.hpp"
 #include "materials/color_material.hpp"
 #include "materials/lambert_material.hpp"
+#include "materials/matte_material.hpp"
+#include "materials/plastic_material.hpp"
+#include "materials/metal_material.hpp"
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "lights/point_light.hpp"
@@ -121,10 +124,32 @@ namespace RT_ISICG
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = Add lights . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = = = = = = = = = = = = = =
-		//_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
-		//_addLight( new QuadLight( Vec3f( 900, 600, -300 ), Vec3f( -800, 0, 0 ), Vec3f( 0, 0, 300 ), WHITE, 20.f ) );
-		_addLight( new QuadLight(
-			Vec3f( -1.5f, 6.9f, 2.0f ), Vec3f( 3.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -4.f ), WHITE, 40.0f ) );
+		_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
+		//_addLight( new QuadLight(
+		//	Vec3f( -1.5f, 6.9f, 2.0f ), Vec3f( 3.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -4.f ), WHITE, 40.0f ) );
+	}
+
+	void Scene::init_tp5()
+	{
+		const std::string DATA_PATH = "./data/";
+		// Add objects.
+		//_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.f, -2.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
+
+		// Add materials.
+		_addMaterial( new MetalMaterial( "Gold", Vec3f( 1.f, 0.85f, 0.57f ), 0.3f, 0.8f, Vec3f( 1.f, 0.85f, 0.57f ) ) );
+		_addMaterial( new MatteMaterial( "Grey", GREY, 0.0f ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		//_attachMaterialToObject( "Gold", "Sphere1" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		loadFileTriangleMesh( "UVsphere", DATA_PATH + "Bunny.obj" );
+		_attachMaterialToObject( "Gold", "UVsphere_defaultobject" );
+
+		// Add lights.
+		_addLight( new PointLight( Vec3f( 0.f, 4.f, 0.f ), WHITE, 70.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

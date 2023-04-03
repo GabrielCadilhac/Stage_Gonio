@@ -47,7 +47,6 @@ namespace RT_ISICG
 
 	bool MeshTriangle::intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const
 	{
-		return false;
 		return _bvh.intersectAny( p_ray, p_tMin, p_tMax );
 		/*
 		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) return false;
