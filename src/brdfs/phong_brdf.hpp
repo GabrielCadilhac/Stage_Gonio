@@ -3,6 +3,8 @@
 
 #include "defines.hpp"
 
+#define BLINN_PHONG
+
 namespace RT_ISICG
 {
 	class PhongBRDF
@@ -12,10 +14,16 @@ namespace RT_ISICG
 
 		inline Vec3f evaluate( const Vec3f & p_incident, const Vec3f & p_observation, const Vec3f & p_normal ) const
 		{
-			const float cosTheta  = glm::max( glm::dot( p_incident, p_normal ), 0.f );
+			const float cosThetaI = glm::max(glm::dot( p_incident, p_normal ), 0.f);
+#ifdef BLINN_PHONG
+			const Vec3f h		 = glm::normalize( p_observation + p_incident );
+			const float cosAlpha = glm::dot( p_normal, h );
+#else
 			const Vec3f reflechie = glm::reflect( p_incident, p_normal );
-			const float cosAlpha  = glm::max( glm::dot( p_observation, reflechie ), 0.f );
-			return ( _kd * INV_PIf ) + ( _ks / cosTheta ) * glm::pow( cosAlpha, _brillance );
+			const float cosAlpha  = glm::dot( p_observation, reflechie );
+#endif // BLINN_PHONG
+
+			return ( _ks / cosThetaI ) * glm::pow( cosAlpha, _brillance );
 		}
 
 		inline const Vec3f & getKd() const { return _kd; }
@@ -23,7 +31,7 @@ namespace RT_ISICG
 	  private:
 		Vec3f _kd		 = WHITE;
 		Vec3f _ks		 = WHITE;
-		float _brillance = 0.0f;
+		float _brillance = 32.0f;
 	};
 } // namespace RT_ISICG
 
