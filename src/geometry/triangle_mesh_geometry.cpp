@@ -16,7 +16,7 @@ namespace RT_ISICG
 		_aabb.extend( _refMesh->_vertices[ _v2 ] );
 	}
 
-	bool TriangleMeshGeometry::intersect( const Ray & p_ray, float & p_t, float p_u, float p_v ) const
+	bool TriangleMeshGeometry::intersect( const Ray & p_ray, float & p_t, float & p_u, float & p_v ) const
 	{
 		const Vec3f & o	 = p_ray.getOrigin();
 		const Vec3f & d	 = p_ray.getDirection();
@@ -24,7 +24,7 @@ namespace RT_ISICG
 		const Vec3f & v1 = _refMesh->_vertices[ _v1 ];
 		const Vec3f & v2 = _refMesh->_vertices[ _v2 ];
 
-		p_t = -1;
+		p_t = -1.f;
 
 		const Vec3f edge1(v1 - v0);
 		const Vec3f edge2(v2 - v0);
@@ -56,7 +56,7 @@ namespace RT_ISICG
 
 	const Vec3f TriangleMeshGeometry::getInterNormal( const float p_u, const float p_v ) const
 	{
-		return glm::normalize( ( 1 - p_u - p_v ) * _refMesh->_normals[ _v0 ] + ( p_u * _refMesh->_normals[ _v1 ] )
+		return glm::normalize( ( 1.f - p_u - p_v ) * _refMesh->_normals[ _v0 ] + ( p_u * _refMesh->_normals[ _v1 ] )
 							   + ( p_v * _refMesh->_normals[ _v2 ] ) );
 	}
 

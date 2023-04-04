@@ -13,7 +13,7 @@ namespace RT_ISICG
 		float tNear = std::max(p_tMin, std::max( std::max( tMin.x, tMin.y ), tMin.z ));
 		float tFar  = std::min(p_tMax, std::min( std::min( tMax.x, tMax.y ), tMax.z ));
 
-		if ( tNear == p_tMin || tFar == p_tMax ) return false;
+		if ( p_tMax < tNear || tFar < p_tMin ) return false;
 
 		return tNear < tFar;
 	}

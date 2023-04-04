@@ -31,9 +31,9 @@ namespace RT_ISICG
 				Ray				  shadowRay( p_hitRecord._point, lightSample._direction );
 				shadowRay.offset( p_hitRecord._normal );
 
-				Vec3f colorMaterial = p_hitRecord._object->getMaterial()->shade( p_ray, p_hitRecord, lightSample );
 				if ( !p_scene.intersectAny( shadowRay, 0, lightSample._distance ) )
 				{
+					Vec3f colorMaterial	 = p_hitRecord._object->getMaterial()->shade( p_ray, p_hitRecord, lightSample );
 					const float cosTheta = std::max( glm::dot( p_hitRecord._normal, lightSample._direction ), 0.f );
 					tempColor += colorMaterial * lightSample._radiance * cosTheta;
 				}

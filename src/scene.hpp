@@ -29,6 +29,7 @@ namespace RT_ISICG
 		void init_tp3();
 		void init_tp4();
 		void init_tp5();
+		void init_tp6();
 
 		// Initialization from file.
 		void init( const std::string & p_path ) { throw std::exception( "Not implemented !" ); }

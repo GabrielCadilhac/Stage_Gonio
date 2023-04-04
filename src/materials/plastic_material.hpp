@@ -23,7 +23,7 @@ namespace RT_ISICG
 		{
 			const Vec3f lambertEval = _lambertBRDF.evaluate();
 			const Vec3f phongEval	= _phongBRDF.evaluate(p_lightSample._direction, -p_ray.getDirection(), p_hitRecord._normal);
-			return phongEval;
+			return 0.3f * phongEval + 0.7f * lambertEval;
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _lambertBRDF.getKd(); }

@@ -84,18 +84,18 @@ namespace RT_ISICG
 		if ( p_node->isLeaf() )
 		{
 			float  tClosest = p_tMax;
-			float  uClosest = p_tMax;
-			float  vClosest = p_tMax;
+			float  uClosest = 0.f;
+			float  vClosest = 0.f;
 			size_t hitTri	= p_node->_lastTriangleId;
 
-			if (p_hitRecord._distance != 0.f)
+			if (p_hitRecord._object != nullptr)
 				tClosest = p_hitRecord._distance;
 
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; ++i )
 			{
 				float t;
-				float u = 0;
-				float v = 0;
+				float u;
+				float v;
 
 				if ( (*_triangles)[ i ].intersect( p_ray, t, u, v ) )
 				{

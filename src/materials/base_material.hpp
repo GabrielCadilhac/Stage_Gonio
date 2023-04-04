@@ -20,6 +20,8 @@ namespace RT_ISICG
 
 		virtual inline const Vec3f & getFlatColor() const = 0;
 
+		virtual inline const bool isMirror() const { return false; };
+
 		virtual const std::string & getName() const final { return _name; }
 
 	  protected:

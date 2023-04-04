@@ -34,7 +34,7 @@ namespace RT_ISICG
 			const Vec3f specular
 				= _cookTorranceBRDF.evaluate( p_lightSample._direction, -p_ray.getDirection(), p_hitRecord._normal );
 
-			return ( 1 - _metalness ) * diffuse + _metalness * specular;
+			return ( 1.f - _metalness ) * diffuse + _metalness * specular;
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _orenNayarBRDF.getKd(); }
