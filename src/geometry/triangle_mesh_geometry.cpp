@@ -33,7 +33,7 @@ namespace RT_ISICG
 
 		if ( det > -FLT_EPSILON && det < FLT_EPSILON ) return false;
 
-		const float invDet = 1.0 / det;
+		const float invDet = 1.f / det;
 
 		// Check if the intersection if on the triangle (x axis)
 		const Vec3f tVec(o - v0);

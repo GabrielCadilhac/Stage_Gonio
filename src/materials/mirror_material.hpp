@@ -8,7 +8,7 @@ namespace RT_ISICG
 	class MirrorMaterial : public BaseMaterial
 	{
 	  public:
-		MirrorMaterial( const std::string & p_name, const Vec3f & p_diffuse, const float p_brillance )
+		MirrorMaterial( const std::string & p_name )
 			: BaseMaterial( p_name )
 		{
 		}

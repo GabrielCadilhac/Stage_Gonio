@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -165,6 +165,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\lights\point_light.cpp" />
     <ClCompile Include="src\lights\quad_light.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\materials\transparent_material.cpp" />
     <ClCompile Include="src\objects\implicit_surface.cpp" />
     <ClCompile Include="src\objects\plane.cpp" />
     <ClCompile Include="src\objects\sphere.cpp" />
@@ -203,7 +204,9 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\materials\lambert_material.hpp" />
     <ClInclude Include="src\materials\matte_material.hpp" />
     <ClInclude Include="src\materials\metal_material.hpp" />
+    <ClInclude Include="src\materials\mirror_material.hpp" />
     <ClInclude Include="src\materials\plastic_material.hpp" />
+    <ClInclude Include="src\materials\transparent_material.hpp" />
     <ClInclude Include="src\objects\base_object.hpp" />
     <ClInclude Include="src\objects\implicit_surface.hpp" />
     <ClInclude Include="src\objects\plane.hpp" />

@@ -53,7 +53,7 @@ namespace RT_ISICG
 
 		if ( nbTriangles > _maxTrianglesPerLeaf && p_depth < _maxDepth )
 		{
-			const size_t axePartition = p_node->_aabb.largestAxis();
+			const int axePartition = static_cast<int>(p_node->_aabb.largestAxis());
 			const Vec3f centre  = p_node->_aabb.centroid();
 			const float milieu	= centre[ axePartition ];
 

@@ -7,28 +7,60 @@ namespace RT_ISICG
 								 const float   p_tMin,
 								 const float   p_tMax ) const
 	{
-		HitRecord hitRecord;
-		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
-			return _directLighting( p_scene, hitRecord, p_ray );
-
-		return _backgroundColor;
+		return _trace( p_scene, p_ray, p_tMin, p_tMax, 0, false );
 	}
 
-	Vec3f WhittedIntegrator::_trace( const Scene &		 p_scene,
-									 const Ray &		 p_ray,
-									 const HitRecord &	 p_hitRecord,
-									 const LightSample & p_lightSample,
-									 const int			 p_bounces )
+	Vec3f WhittedIntegrator::_trace( const Scene & p_scene,
+									 const Ray &   p_ray,
+									 const float   p_tMin,
+									 const float   p_tMax,
+									 const int	   p_bounces,
+									 const bool	   p_inObject ) const
 	{
+		HitRecord hitRecord;
+		// S'il n'y a pas d'intersection avec la scène on renvoie la couleur de fond
+		if ( !p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) ) return _backgroundColor;
+
+		// Cas d'arrêt de la récursion pour éviter les réflexions infinie
 		if ( p_bounces >= _nbBounces ) return BLACK;
 
-		if ( p_hitRecord._object->getMaterial()->isMirror() )
+		// Vérifier si l'objet est un mirroir
+		if ( hitRecord._object->getMaterial()->isMirror() )
 		{
-			const Vec3f reflection = glm::reflect( p_lightSample._direction, p_hitRecord._normal );
-			const Ray	rayonReflexion( p_hitRecord._point, reflection );
-			_trace( p_scene, rayonReflexion, p_hitRecord, p_lightSample );
+			// Calculer le vecteur réfléchie
+			const Vec3f reflectDirection = glm::normalize( glm::reflect( p_ray.getDirection(), hitRecord._normal ) );
+			// Puis le rayon
+			const Ray rayonReflexion( hitRecord._point, reflectDirection );
+			// Pour réaliser un appel récursif sur le rayon réfléchie
+			return _trace( p_scene, rayonReflexion, p_tMin, p_tMax, p_bounces + 1, p_inObject );
 		}
-		else { return _directLighting( p_scene, p_hitRecord, p_ray ); }
+		else if ( hitRecord._object->getMaterial()->isTransparent() )
+		{
+			const Vec3f reflectDirection = glm::normalize( glm::reflect( p_ray.getDirection(), hitRecord._normal ) );
+			const Ray	rayReflexion( hitRecord._point, reflectDirection );
+			const Vec3f reflectedColor = _trace( p_scene, rayReflexion, p_tMin, p_tMax, p_bounces + 1, p_inObject );
+
+			float n1 = 1.f;
+			float n2 = 1.f;
+			if ( p_inObject )
+				n1 = hitRecord._object->getMaterial()->getIOR();
+			else
+				n2 = hitRecord._object->getMaterial()->getIOR();
+
+			const float eta = n1 / n2;
+			const Vec3f refractDirection
+				= glm::normalize( glm::refract( p_ray.getDirection(), hitRecord._normal, eta ) );
+			const Ray	rayRefraction( hitRecord._point, refractDirection );
+			const Vec3f refractedColor = _trace( p_scene, rayRefraction, p_tMin, p_tMax, p_bounces + 1, !p_inObject );
+
+			const float rpar  = _f( hitRecord._normal, refractDirection, -p_ray.getDirection(), n2, n1 );
+			const float rperp = _f( hitRecord._normal, refractDirection, -p_ray.getDirection(), n1, n2 );
+			const float kr	  = 0.5f * ( glm::pow( rpar, 2.f ) + glm::pow( rperp, 2.f ) );
+			
+			return kr * reflectedColor + ( 1.f - kr ) * refractedColor;
+		}
+		else
+			return _directLighting( p_scene, hitRecord, p_ray );
 	}
 
 	Vec3f WhittedIntegrator::_directLighting( const Scene &		p_scene,
