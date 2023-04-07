@@ -5,10 +5,11 @@
 
 namespace RT_ISICG
 {
-	class ImplicitSphere : ImplicitSurface
+	class ImplicitSphere : public ImplicitSurface
 	{
+	  public: 
 		ImplicitSphere()  = delete;
-		~ImplicitSphere() = default;
+		virtual ~ImplicitSphere() = default;
 
 		ImplicitSphere( const std::string p_name, const Vec3f & p_center, const float p_radius )
 			: ImplicitSurface( p_name ), _center( p_center ), _radius(p_radius) {};

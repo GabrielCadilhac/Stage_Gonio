@@ -221,7 +221,7 @@ namespace RT_ISICG
 		_addMaterial( new ColorMaterial( "Red", RED ) );
 
 		// Link objects and materials.
-		_attachMaterialToObject( "Red", "Plane1" );
+		_attachMaterialToObject( "Red", "Sphere1" );
 
 		// Add lights.
 		_addLight( new PointLight( Vec3f( 0.f, 0.f, -2.f ), WHITE, 60.f ) );

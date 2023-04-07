@@ -12,10 +12,10 @@ namespace RT_ISICG
 		float distance = p_tMin;
 
 		while (step < p_tMax) {
-			if (step <= 0) {
+			if (step <= 0.01f) {
 				p_hitRecord._point	= pos;
-				//p_hitRecord._normal = _geometry.computeNormal( p_hitRecord._point );
-				//p_hitRecord.faceNormal( p_ray.getDirection() );
+				p_hitRecord._normal = _evaluateNormal( p_hitRecord._point );
+				p_hitRecord.faceNormal( p_ray.getDirection() );
 				p_hitRecord._distance = distance;
 				p_hitRecord._object	  = this;
 				return true;

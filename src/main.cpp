@@ -20,7 +20,7 @@ namespace RT_ISICG
 		Scene scene;
 
 		// Changer le .init_tp en fonction du numéro du tp souhaité
-		scene.init_tp6();
+		scene.init_tp7();
 
 		// Create a perspective camera.
 		//PerspectiveCamera camera( aspectRatio );
