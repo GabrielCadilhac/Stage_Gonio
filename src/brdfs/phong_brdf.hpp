@@ -15,12 +15,13 @@ namespace RT_ISICG
 		inline Vec3f evaluate( const Vec3f & p_incident, const Vec3f & p_observation, const Vec3f & p_normal ) const
 		{
 			const float cosThetaI = glm::max(glm::dot( p_incident, p_normal ), 0.f);
+			if ( cosThetaI == 0.f ) return BLACK;
 #ifdef BLINN_PHONG
 			const Vec3f h		 = glm::normalize( p_observation + p_incident );
-			const float cosAlpha = glm::dot( p_normal, h );
+			const float cosAlpha = glm::max(glm::dot( p_normal, h ), 0.f);
 #else
 			const Vec3f reflechie = glm::reflect( p_incident, p_normal );
-			const float cosAlpha  = glm::dot( p_observation, reflechie );
+			const float cosAlpha  = glm::max(glm::dot( p_observation, reflechie ), 0.f);
 #endif // BLINN_PHONG
 
 			return ( _ks / cosThetaI ) * glm::pow( cosAlpha, _brillance );

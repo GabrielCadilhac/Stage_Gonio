@@ -47,20 +47,26 @@ namespace RT_ISICG
 			else
 				n2 = hitRecord._object->getMaterial()->getIOR();
 
-			const float eta = n1 / n2;
+			const float eta		  = n1 / n2;
+			const float cosThetaI = glm::max(glm::dot( -p_ray.getDirection(), hitRecord._normal ), 0.f);
+			const float thetaI	  = glm::acos( cosThetaI );
+			const float sqrtSin	  = glm::sqrt( 1.f - ( eta * glm::sin( thetaI ) ) );
+
+			const float rs	= ( n1 * cosThetaI - n2 * sqrtSin ) / ( n1 * cosThetaI + n2 * sqrtSin );
+			const float rp  = ( n1 * sqrtSin - n2 * cosThetaI ) / ( n1 * sqrtSin + n2 * cosThetaI );
+			const float kr	= 0.5f * ( rs * rs + rp * rp );
+
+			if ( eta * glm::sin( thetaI ) > 1.f ) return reflectedColor;
+
 			const Vec3f refractDirection
 				= glm::normalize( glm::refract( p_ray.getDirection(), hitRecord._normal, eta ) );
+
 			const Ray	rayRefraction( hitRecord._point, refractDirection );
 			const Vec3f refractedColor = _trace( p_scene, rayRefraction, p_tMin, p_tMax, p_bounces + 1, !p_inObject );
 
-			const float rpar  = _f( hitRecord._normal, refractDirection, -p_ray.getDirection(), n2, n1 );
-			const float rperp = _f( hitRecord._normal, refractDirection, -p_ray.getDirection(), n1, n2 );
-			const float kr	  = 0.5f * ( glm::pow( rpar, 2.f ) + glm::pow( rperp, 2.f ) );
-			
 			return kr * reflectedColor + ( 1.f - kr ) * refractedColor;
 		}
-		else
-			return _directLighting( p_scene, hitRecord, p_ray );
+		return _directLighting( p_scene, hitRecord, p_ray );
 	}
 
 	Vec3f WhittedIntegrator::_directLighting( const Scene &		p_scene,

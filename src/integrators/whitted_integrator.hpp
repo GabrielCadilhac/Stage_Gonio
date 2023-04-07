@@ -27,13 +27,6 @@ namespace RT_ISICG
 					  const int		p_bounces,
 					  const bool p_inObject) const;
 
-		inline const float _f(const Vec3f& p_n, const Vec3f& p_t, const Vec3f& p_o, const float p_nt, const float p_ni) const
-		{
-			const float num = p_nt * glm::dot( p_n, p_o ) + p_ni * glm::dot( p_n, p_t );
-			const float den = p_nt * glm::dot( p_n, p_o ) - p_ni * glm::dot( p_n, p_t );
-			return num / den;
-		}
-
 		int _nbBounces = 5;
 	};
 } // namespace RT_ISICG

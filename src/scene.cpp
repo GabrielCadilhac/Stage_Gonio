@@ -13,6 +13,7 @@
 #include "objects/plane.hpp"
 #include "objects/sphere.hpp"
 #include "objects/triangle_mesh.hpp"
+#include "objects/implicit_sphere.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -142,8 +143,7 @@ namespace RT_ISICG
 		_addObject( new Plane( "Plane1", Vec3f( 0.f, -2.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
 
 		// Add materials.
-		//_addMaterial( new MetalMaterial( "Gold", Vec3f( 1.f, 0.85f, 0.57f ), 0.3f, 0.8f, Vec3f( 1.f, 0.85f, 0.57f ) )
-		//);
+		_addMaterial( new MetalMaterial( "Gold", Vec3f( 1.f, 0.85f, 0.57f ), 0.3f, 0.8f, Vec3f( 1.f, 0.85f, 0.57f ) ) );
 		_addMaterial( new PlasticMaterial( "Red", RED, 16.f ) );
 		_addMaterial( new MatteMaterial( "Grey", GREY, 0.6f ) );
 
@@ -181,13 +181,13 @@ namespace RT_ISICG
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = =
 		// Spheres .
-		//_addObject( new Sphere( "Sphere1", Vec3f( -2.f, 0.f, 3.f ), 1.5f ) );
-		//_attachMaterialToObject( "Mirror", "Sphere1" );
-		//_addObject( new Sphere( "Sphere2", Vec3f( 2.f, 0.f, 3.f ), 1.5f ) );
-		//_attachMaterialToObject( "TransparentMaterial", "Sphere2" );
+		_addObject( new Sphere( "Sphere1", Vec3f( -2.f, 0.f, 3.f ), 1.5f ) );
+		_attachMaterialToObject( "Mirror", "Sphere1" );
+		_addObject( new Sphere( "Sphere2", Vec3f( 2.f, 0.f, 3.f ), 1.5f ) );
+		_attachMaterialToObject( "TransparentMaterial", "Sphere2" );
 
-		loadFileTriangleMesh( "UVsphere", DATA_PATH + "Bunny.obj" );
-		_attachMaterialToObject( "Mirror", "UVsphere_defaultobject" );
+		//loadFileTriangleMesh( "UVsphere", DATA_PATH + "Bunny.obj" );
+		//_attachMaterialToObject( "Mirror", "UVsphere_defaultobject" );
 
 		// Pseudo Cornell box made with infinite planes .
 		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
@@ -210,6 +210,21 @@ namespace RT_ISICG
 		_addLight( new PointLight( Vec3f( 0.f, 5.f, 0.f ), WHITE, 100.f ) );
 		//_addLight(
 		//	new QuadLight( Vec3f( 1.f, 5.f, -2.f ), Vec3f( -2.f, 0.f, 0.f ), Vec3f( 0.f, 1.f, 2.f ), WHITE, 40.f ) );
+	}
+
+	void Scene::init_tp7()
+	{
+		// Add objects.
+		_addObject( new ImplicitSphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights.
+		_addLight( new PointLight( Vec3f( 0.f, 0.f, -2.f ), WHITE, 60.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
