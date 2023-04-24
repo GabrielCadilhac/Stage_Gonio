@@ -217,7 +217,7 @@ namespace RT_ISICG
 	{
 		// Add objects.
 		//_addObject( new ImplicitSphere( "Sphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
-		_addObject( new ImplicitBoxFrame( "BoxFrame", Vec3f( 0.5f, 0.3f, 0.5f ), 0.025f ) );
+		_addObject( new ImplicitBoxFrame( "BoxFrame", Vec3f(0.f, 2.f, -4.f), Vec3f( 0.5f, 0.3f, 0.5f ), 0.025f ) );
 
 		// Add materials.
 		//_addMaterial( new ColorMaterial( "Blue", BLUE ) );

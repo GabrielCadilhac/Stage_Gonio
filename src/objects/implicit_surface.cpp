@@ -14,7 +14,7 @@ namespace RT_ISICG
 			const Vec3f pos	 = p_ray.getOrigin() + p_ray.getDirection() * t;
 			const float dist = _sdf( pos );
 
-			if ( dist < FLT_EPSILON )
+			if ( glm::abs(dist) < _minDistance )
 			{
 				p_hitRecord._point	= pos;
 				p_hitRecord._normal = _evaluateNormal( p_hitRecord._point );
@@ -39,7 +39,7 @@ namespace RT_ISICG
 			const Vec3f pos	 = p_ray.getOrigin() + p_ray.getDirection() * t;
 			const float dist = _sdf( pos );
 
-			if ( dist < FLT_EPSILON ) return true;
+			if ( dist < _minDistance ) return true;
 
 			t += dist;
 			i++;

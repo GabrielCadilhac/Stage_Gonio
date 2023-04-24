@@ -91,7 +91,7 @@ namespace RT_ISICG
 				}
 
 				couleur /= _nbPixelSamples;
-				couleur = glm::clamp( couleur, 0.f, 1.f );
+				couleur  = glm::clamp( couleur, 0.f, 1.f );
 
 				p_texture.setPixel( i, j, couleur );
 			}
