@@ -7,40 +7,42 @@ namespace RT_ISICG
 									 const float p_tMax,
 									 HitRecord & p_hitRecord ) const
 	{
-		Vec3f pos = p_ray.getOrigin();
-		float step = p_tMin;
-		float distance = p_tMin;
+		float t = p_tMin;
+		int   i = 0;
+		while ( t < p_tMax && i < 128 )
+		{
+			const Vec3f pos	 = p_ray.getOrigin() + p_ray.getDirection() * t;
+			const float dist = _sdf( pos );
 
-		while (step < p_tMax) {
-			if (step <= 0.01f) {
+			if ( dist < FLT_EPSILON )
+			{
 				p_hitRecord._point	= pos;
 				p_hitRecord._normal = _evaluateNormal( p_hitRecord._point );
 				p_hitRecord.faceNormal( p_ray.getDirection() );
-				p_hitRecord._distance = distance;
+				p_hitRecord._distance = t;
 				p_hitRecord._object	  = this;
 				return true;
 			}
 
-			pos += p_ray.getDirection() * step;
-			distance += p_ray.getDirection().length() * step;
-			step = _sdf( pos );
+			t += dist;
+			i++;
 		}
-
 		return false;
 	}
 
 	bool ImplicitSurface::intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const
 	{
-		Vec3f pos	   = p_ray.getOrigin();
-		float step	   = p_tMin;
-
-		while ( step < p_tMax )
+		float t = p_tMin;
+		int	  i = 0;
+		while ( t < p_tMax && i < 128 )
 		{
-			if ( step <= 0 )
-				return true;
+			const Vec3f pos	 = p_ray.getOrigin() + p_ray.getDirection() * t;
+			const float dist = _sdf( pos );
 
-			pos += p_ray.getDirection() * step;
-			step = _sdf( pos );
+			if ( dist < FLT_EPSILON ) return true;
+
+			t += dist;
+			i++;
 		}
 		return false;
 	}

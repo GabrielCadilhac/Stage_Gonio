@@ -166,6 +166,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\lights\quad_light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\transparent_material.cpp" />
+    <ClCompile Include="src\objects\implicit_box_frame.cpp" />
     <ClCompile Include="src\objects\implicit_sphere.cpp" />
     <ClCompile Include="src\objects\implicit_surface.cpp" />
     <ClCompile Include="src\objects\plane.cpp" />
@@ -209,6 +210,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\materials\plastic_material.hpp" />
     <ClInclude Include="src\materials\transparent_material.hpp" />
     <ClInclude Include="src\objects\base_object.hpp" />
+    <ClInclude Include="src\objects\implicit_box_frame.hpp" />
     <ClInclude Include="src\objects\implicit_sphere.hpp" />
     <ClInclude Include="src\objects\implicit_surface.hpp" />
     <ClInclude Include="src\objects\plane.hpp" />

@@ -14,6 +14,7 @@
 #include "objects/sphere.hpp"
 #include "objects/triangle_mesh.hpp"
 #include "objects/implicit_sphere.hpp"
+#include "objects/implicit_box_frame.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -66,7 +67,7 @@ namespace RT_ISICG
 		_attachMaterialToObject( "Red", "Plane1" );
 
 		// Add lights.
-		_addLight( new PointLight( Vec3f( 1, 10, 1 ), WHITE, 100 ) );
+		_addLight( new PointLight( Vec3f( 1, 10, 1 ), WHITE, 100.f ) );
 	}
 
 	void Scene::init_tp3()
@@ -215,16 +216,19 @@ namespace RT_ISICG
 	void Scene::init_tp7()
 	{
 		// Add objects.
-		_addObject( new ImplicitSphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		//_addObject( new ImplicitSphere( "Sphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new ImplicitBoxFrame( "BoxFrame", Vec3f( 0.5f, 0.3f, 0.5f ), 0.025f ) );
 
 		// Add materials.
+		//_addMaterial( new ColorMaterial( "Blue", BLUE ) );
 		_addMaterial( new ColorMaterial( "Red", RED ) );
 
 		// Link objects and materials.
-		_attachMaterialToObject( "Red", "Sphere1" );
+		//_attachMaterialToObject( "Blue", "Sphere" );
+		_attachMaterialToObject( "Red", "BoxFrame" );
 
 		// Add lights.
-		_addLight( new PointLight( Vec3f( 0.f, 0.f, -2.f ), WHITE, 60.f ) );
+		_addLight( new PointLight( Vec3f( 1.f, 10.f, 1.f ), WHITE, 100.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
