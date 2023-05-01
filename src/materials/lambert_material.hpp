@@ -24,6 +24,7 @@ namespace RT_ISICG
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _brdf.getKd(); }
+		inline const Vec3f & getReflectivity() const override { return VEC3F_ZERO; };
 
 	  protected:
 		LambertBRDF _brdf;

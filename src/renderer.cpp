@@ -2,6 +2,7 @@
 #include "integrators/direct_lighting_integrator.hpp"
 #include "integrators/ray_cast_integrator.hpp"
 #include "integrators/whitted_integrator.hpp"
+#include "integrators/virtual_point_light_integrator.hpp"
 #include "utils/console_progress_bar.hpp"
 #include "utils/random.hpp"
 
@@ -28,6 +29,10 @@ namespace RT_ISICG
 		case IntegratorType::WHITTED:
 			_integrator = new WhittedIntegrator();
 			break;
+
+		case IntegratorType::VIRTUAL_POINT_LIGHT:
+			_integrator = new VirtualPointLightIntegrator(); 
+			break;
 		}
 	}
 
@@ -52,6 +57,8 @@ namespace RT_ISICG
 
 		progressBar.start( height, 50 );
 		chrono.start();
+
+		_integrator->sampleVPL( p_scene, distMax );
 
 		const float pixelWidth	= ( 1.f / (float)( width - 1.f ) );
 		const float pixelHeight = ( 1.f / (float)( height - 1.f ) );

@@ -19,6 +19,7 @@ namespace RT_ISICG
 							 const LightSample & p_lightSample ) const = 0;
 
 		virtual inline const Vec3f & getFlatColor() const = 0;
+		virtual inline const Vec3f & getReflectivity() const = 0;
 
 		virtual inline const bool isMirror() const { return false; };
 		virtual inline const bool isTransparent() const { return false; };

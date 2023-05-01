@@ -20,7 +20,7 @@ namespace RT_ISICG
 		Scene scene;
 
 		// Changer le .init_tp en fonction du numéro du tp souhaité
-		scene.init_tp6();
+		scene.init_tp4();
 
 		// Create a perspective camera.
 		//PerspectiveCamera camera( aspectRatio );
@@ -30,9 +30,9 @@ namespace RT_ISICG
 
 		// Create and setup the renderer.
 		Renderer renderer;
-		renderer.setIntegrator( IntegratorType::WHITTED );
+		renderer.setIntegrator( IntegratorType::VIRTUAL_POINT_LIGHT );
 		renderer.setBackgroundColor( GREY );
-		renderer.setNbPixelSamples( 8 );
+		renderer.setNbPixelSamples( 1 );
 		renderer.setNbLightSamples( 1 );
 
 		// Launch rendering.

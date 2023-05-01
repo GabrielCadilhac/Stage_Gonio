@@ -45,6 +45,23 @@ namespace RT_ISICG
 		// Returns the AABB diagonal vector.
 		inline Vec3f diagonal() const { return _max - _min; }
 
+		//Returns the AABB surface area
+		inline float surfaceArea() const
+		{
+			const Vec3f d = _max - _min;
+			return 2.f * ( d.x * d.y + d.x * d.z + d.y * d.z );
+		}
+
+		//Returns the relative position of p_point from AABB bottom-left corner
+		inline Vec3f relativePosition(const Vec3f& p_point) const
+		{
+			Vec3f v = p_point - _min;
+			if ( _max.x > _min.x ) v.x /= _max.x - _min.x;
+			if ( _max.y > _min.y ) v.y /= _max.y - _min.y;
+			if ( _max.z > _min.z ) v.z /= _max.z - _min.z;
+			return v;
+		}
+
 		// Returns the AABB centroid.
 		inline Vec3f centroid() const { return ( _min + _max ) * 0.5f; }
 

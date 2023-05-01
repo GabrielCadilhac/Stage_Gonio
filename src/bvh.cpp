@@ -18,7 +18,7 @@ namespace RT_ISICG
 		chr.start();
 
 		_root = new BVHNode();
-		_buildRec( _root, 0, static_cast<unsigned int>(_triangles->size()), 0 );
+		_buildRec( _root, 0, static_cast<unsigned int>( _triangles->size() ), 0 );
 
 		chr.stop();
 
@@ -53,17 +53,27 @@ namespace RT_ISICG
 
 		if ( nbTriangles > _maxTrianglesPerLeaf && p_depth < _maxDepth )
 		{
-			const int axePartition = static_cast<int>(p_node->_aabb.largestAxis());
-			const Vec3f centre  = p_node->_aabb.centroid();
-			const float milieu	= centre[ axePartition ];
+			int			nbBuckets	 = _nbBuckets;
+			const int	axePartition = static_cast<int>( p_node->_aabb.largestAxis() );
+			//int			axePartition = -1;
+			const int	splitIndex	 = -1; //_computeSAH( p_node->_aabb, p_firstTriangleId, p_lastTriangleId, axePartition );
+			const Vec3f centre		 = p_node->_aabb.centroid();
+			const float milieu		 = centre[ axePartition ];
 
-			const std::vector<TriangleMeshGeometry>::iterator pt
-				= std::partition( _triangles->begin() + p_firstTriangleId,
-								  _triangles->begin() + p_lastTriangleId,
-								  [ milieu, axePartition ]( const TriangleMeshGeometry & triangle )
-								  { return triangle.getAABB().centroid()[axePartition] < milieu; } );
+			const std::vector<TriangleMeshGeometry>::iterator pt = std::partition(
+				_triangles->begin() + p_firstTriangleId,
+				_triangles->begin() + p_lastTriangleId,
+				[ splitIndex, axePartition, p_node, nbBuckets, milieu ]( const TriangleMeshGeometry & triangle )
+				{
+					//int b = nbBuckets
+					//		* static_cast<int>(
+					//			p_node->_aabb.relativePosition( triangle.getAABB().centroid() )[ axePartition ] );
+					//if ( b == nbBuckets ) b = nbBuckets - 1;
+					//return b <= splitIndex;
+					 return triangle.getAABB().centroid()[ axePartition ] <= milieu;
+				} );
 
-			const unsigned int idPartition = static_cast<unsigned int>(pt - _triangles->begin());
+			const unsigned int idPartition = static_cast<unsigned int>( pt - _triangles->begin() );
 
 			p_node->_left  = new BVHNode();
 			p_node->_right = new BVHNode();
@@ -88,8 +98,7 @@ namespace RT_ISICG
 			float  vClosest = 0.f;
 			size_t hitTri	= p_node->_lastTriangleId;
 
-			if (p_hitRecord._object != nullptr)
-				tClosest = p_hitRecord._distance;
+			if ( p_hitRecord._object != nullptr ) tClosest = p_hitRecord._distance;
 
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; ++i )
 			{
@@ -97,7 +106,7 @@ namespace RT_ISICG
 				float u;
 				float v;
 
-				if ( (*_triangles)[ i ].intersect( p_ray, t, u, v ) )
+				if ( ( *_triangles )[ i ].intersect( p_ray, t, u, v ) )
 				{
 					if ( t >= p_tMin && t <= tClosest )
 					{
@@ -123,7 +132,7 @@ namespace RT_ISICG
 			return false;
 		}
 
-		bool intersectedLeft  = _intersectRec( p_node->_left , p_ray, p_tMin, p_tMax, p_hitRecord );
+		bool intersectedLeft  = _intersectRec( p_node->_left, p_ray, p_tMin, p_tMax, p_hitRecord );
 		bool intersectedRight = _intersectRec( p_node->_right, p_ray, p_tMin, p_tMax, p_hitRecord );
 
 		return intersectedLeft || intersectedRight;
@@ -141,9 +150,9 @@ namespace RT_ISICG
 			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; i++ )
 			{
 				float t;
-				float u = 0;
-				float v = 0;
-				if ( (*_triangles)[ i ].intersect( p_ray, t, u, v ) )
+				float u = 0.f;
+				float v = 0.f;
+				if ( ( *_triangles )[ i ].intersect( p_ray, t, u, v ) )
 				{
 					if ( t >= p_tMin && t <= p_tMax ) return true;
 				}
@@ -153,5 +162,79 @@ namespace RT_ISICG
 
 		return _intersectAnyRec( p_node->_left, p_ray, p_tMin, p_tMax )
 			   || _intersectAnyRec( p_node->_right, p_ray, p_tMin, p_tMax );
+	}
+
+	int BVH::_computeSAH( const AABB &		 p_aabb,
+						  const unsigned int p_firstTriangleId,
+						  const unsigned int p_lastTriangleId,
+						  int &				 p_dim ) const
+	{
+		const int index0 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 0 );
+		const int index1 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 1 );
+		const int index2 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 2 );
+		const int index	 = glm::min( index0, glm::min( index1, index2 ) );
+
+		if ( index == index0 )
+			p_dim = 0;
+		else if ( index == index1 )
+			p_dim = 1;
+		else
+			p_dim = 2;
+
+		return index;
+	}
+
+	int BVH::_bestSplitIndex( const AABB &		 p_aabb,
+							  const unsigned int p_firstTriangleId,
+							  const unsigned int p_lastTriangleId,
+							  const unsigned int p_dim ) const
+	{
+		Bucket * buckets = new Bucket[ _nbBuckets ];
+
+		// Compute buckets
+		for ( unsigned int i = p_firstTriangleId; i < p_lastTriangleId; ++i )
+		{
+			TriangleMeshGeometry triangle = ( *_triangles )[ i ];
+			int b = _nbBuckets * static_cast<int>( p_aabb.relativePosition( triangle.getAABB().centroid() )[ p_dim ] );
+			if ( b == _nbBuckets ) b = _nbBuckets - 1;
+			buckets[ b ].count++;
+			buckets[ b ].bounds.extend( triangle.getAABB() );
+		}
+
+		// Compute costs
+		float * costs = new float[ _nbBuckets ];
+		for ( int i = 0; i < _nbBuckets - 1; ++i )
+			costs[ i ] = 0.f;
+
+		for ( int i = 0; i < _nbBuckets - 1; ++i )
+		{
+			AABB b0, b1;
+			int	 count0 = 0, count1 = 0;
+			for ( int j = 0; j <= i; ++j )
+			{
+				b0.extend( buckets[ j ].bounds );
+				count0 += buckets[ j ].count;
+			}
+			for ( int j = i + 1; j < _nbBuckets; ++j )
+			{
+				b1.extend( buckets[ j ].bounds );
+				count1 += buckets[ j ].count;
+			}
+			costs[ i ] += 0.125f + ( count0 * b0.surfaceArea() + count1 * b1.surfaceArea() ) / p_aabb.surfaceArea();
+		}
+
+		// Search for the min cost
+		float minCost			= costs[ 0 ];
+		int	  minCostSplitIndex = 0;
+		for ( int i = 1; i < _nbBuckets - 1; ++i )
+		{
+			if ( minCost > costs[ i ] )
+			{
+				minCost			  = costs[ i ];
+				minCostSplitIndex = i;
+			}
+		}
+
+		return minCostSplitIndex;
 	}
 } // namespace RT_ISICG

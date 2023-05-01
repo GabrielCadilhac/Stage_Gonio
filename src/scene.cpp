@@ -1,6 +1,7 @@
 #include "scene.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
+#include "lights/disk_light.hpp"
 
 #include "materials/color_material.hpp"
 #include "materials/lambert_material.hpp"
@@ -15,6 +16,7 @@
 #include "objects/triangle_mesh.hpp"
 #include "objects/implicit_sphere.hpp"
 #include "objects/implicit_box_frame.hpp"
+#include "objects/implicit_octahedron.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -59,15 +61,15 @@ namespace RT_ISICG
 		_addObject( new Plane( "Plane1", Vec3f( 0.f, -2.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
 
 		// Add materials.
-		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
-		_addMaterial( new ColorMaterial( "Red", RED ) );
+		_addMaterial( new PlasticMaterial( "Blue", BLUE, 16.f ) );
+		_addMaterial( new PlasticMaterial( "Red", RED, 16.f ) );
 
 		// Link objects and materials.
 		_attachMaterialToObject( "Blue", "Sphere1" );
 		_attachMaterialToObject( "Red", "Plane1" );
 
 		// Add lights.
-		_addLight( new PointLight( Vec3f( 1, 10, 1 ), WHITE, 100.f ) );
+		_addLight( new PointLight( Vec3f( 1.f, 10.f, 1.f ), WHITE, 500.f ) );
 	}
 
 	void Scene::init_tp3()
@@ -85,6 +87,7 @@ namespace RT_ISICG
 		_attachMaterialToObject( "Red", "Plane1" );
 
 		// Add lights.
+		//_addLight( new QuadLight( Vec3f( 1, 10, 2 ), Vec3f( -2, 0, 0 ), Vec3f( 0, 0, 2 ), WHITE, 40.f ) );
 		_addLight( new QuadLight( Vec3f( 1, 10, 2 ), Vec3f( -2, 0, 0 ), Vec3f( 0, 0, 2 ), WHITE, 40.f ) );
 	}
 
@@ -95,19 +98,25 @@ namespace RT_ISICG
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = Add materials . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = = = = = = = = = = = = = = =
-		_addMaterial( new ColorMaterial( "RedColor", RED ) );
-		_addMaterial( new ColorMaterial( "GreenColor", GREEN ) );
-		_addMaterial( new ColorMaterial( "BlueColor", BLUE ) );
-		_addMaterial( new ColorMaterial( "GreyColor", GREY ) );
-		_addMaterial( new ColorMaterial( "MagentaColor", MAGENTA ) );
-		_addMaterial( new ColorMaterial( "YellowColor", YELLOW ) );
-		_addMaterial( new ColorMaterial( "CyanColor", CYAN ) );
+		_addMaterial( new MatteMaterial( "RedColor", RED, 0.6f ) );
+		_addMaterial( new MatteMaterial( "GreenColor", GREEN, 0.6f ) );
+		_addMaterial( new MatteMaterial( "BlueColor", BLUE, 0.6f ) );
+		_addMaterial( new MatteMaterial( "GreyColor", GREY, 0.6f ) );
+		_addMaterial( new MatteMaterial( "MagentaColor", MAGENTA, 0.6f ) );
+		_addMaterial( new MatteMaterial( "YellowColor", YELLOW, 0.6f ) );
+		_addMaterial( new MatteMaterial( "CyanColor", CYAN, 0.6f ) );
+		_addMaterial( new MatteMaterial( "BlackColor", CYAN, 0.6f ) );
 
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = Add objects . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = = = = = = = = = = = = = = OBJ .
-		loadFileTriangleMesh( "UVsphere", DATA_PATH + "uvsphere.obj" );
-		_attachMaterialToObject( "CyanColor", "UVsphere_defaultobject" );
+		//loadFileTriangleMesh( "UVsphere", DATA_PATH + "uvsphere.obj" );
+		//_attachMaterialToObject( "CyanColor", "UVsphere_defaultobject" );
+
+		_addObject( new Sphere( "Sphere1", Vec3f( -2.f, 0.f, 3.f ), 1.5f ) );
+		_attachMaterialToObject( "CyanColor", "Sphere1" );
+		_addObject( new Sphere( "Sphere2", Vec3f( 2.f, 0.f, 3.f ), 1.5f ) );
+		_attachMaterialToObject( "CyanColor", "Sphere2" );
 
 		// Pseudo Cornell box made with infinite planes .
 		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
@@ -127,11 +136,10 @@ namespace RT_ISICG
 
 		_addObject( new Plane( "PlaneRear", Vec3f( 0.f, 0.f, -10.f ), Vec3f( 0.f, 0.f, 1.f ) ) );
 		_attachMaterialToObject( "YellowColor", "PlaneRear" );
-
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = Add lights . = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		// = = = = = = = = = = = = = = = = = = = = = = = = =
-		_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.f ) );
+		_addLight( new PointLight( Vec3f( 0.f, 5.f, 0.f ), WHITE, 100.f ) );
 		//_addLight( new QuadLight(
 		//	Vec3f( -1.5f, 6.9f, 2.0f ), Vec3f( 3.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -4.f ), WHITE, 40.0f ) );
 	}
@@ -216,19 +224,27 @@ namespace RT_ISICG
 	void Scene::init_tp7()
 	{
 		// Add objects.
-		//_addObject( new ImplicitSphere( "Sphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
-		_addObject( new ImplicitBoxFrame( "BoxFrame", Vec3f(0.f, 2.f, -4.f), Vec3f( 0.5f, 0.3f, 0.5f ), 0.025f ) );
+		_addObject( new ImplicitSphere( "Sphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new ImplicitBoxFrame( "BoxFrame", Vec3f(0.f, 0.f, 3.f), Vec3f( 1.f, 1.f, 1.f ), 0.1f ) );
+		_addObject( new ImplicitOctahedron( "Octahedron", Vec3f(0.f, 3.f, 3.f), 1.f ) );
+		_addObject( new Plane( "Plane", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
 
 		// Add materials.
-		//_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
 		_addMaterial( new ColorMaterial( "Red", RED ) );
+		_addMaterial( new ColorMaterial( "Green", GREEN) );
+		_addMaterial( new ColorMaterial( "Cyan", CYAN ) );
 
 		// Link objects and materials.
-		//_attachMaterialToObject( "Blue", "Sphere" );
-		_attachMaterialToObject( "Red", "BoxFrame" );
+		_attachMaterialToObject( "Blue", "Sphere" );
+		_attachMaterialToObject( "Red", "Octahedron" );
+		_attachMaterialToObject( "Green", "BoxFrame" );
+		_attachMaterialToObject( "Cyan", "Plane" );
 
 		// Add lights.
-		_addLight( new PointLight( Vec3f( 1.f, 10.f, 1.f ), WHITE, 100.f ) );
+		_addLight( new PointLight( Vec3f( 0.f, 4.f, 0.f ), WHITE, 100.f ) );
+		//_addLight( new PointLight( Vec3f( -1.f, 3.f, 0.f ), WHITE, 75.f ) );
+		//_addLight( new PointLight( Vec3f( 1.f, 3.f, 0.f ), WHITE, 75.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

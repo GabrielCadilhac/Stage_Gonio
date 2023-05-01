@@ -20,6 +20,7 @@ namespace RT_ISICG
 		}
 
 		inline const Vec3f & getFlatColor() const override { return BLACK; }
+		inline const Vec3f & getReflectivity() const override { return VEC3F_ZERO; };
 
 		inline const bool isTransparent() const override { return true; };
 

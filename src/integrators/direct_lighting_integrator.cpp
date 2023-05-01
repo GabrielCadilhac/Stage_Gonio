@@ -15,31 +15,34 @@ namespace RT_ISICG
 	}
 
 	Vec3f DirectLightingIntegrator::_directLighting( const Scene &	   p_scene,
-													 const HitRecord & p_hitRecord, const Ray & p_ray ) const
+													 const HitRecord & p_hitRecord,
+													 const Ray &	   p_ray ) const
 	{
 		Vec3f color = VEC3F_ZERO;
 		for ( BaseLight * light : p_scene.getLights() )
 		{
-			Vec3f		 tempColor = VEC3F_ZERO;
-			float _nbShadowSamples = 1;
+			Vec3f tempColor		  = VEC3F_ZERO;
+			float nbShadowSamples = 1;
 
-			if ( light->getIsSurface() ) _nbShadowSamples = static_cast<float>(_nbLightSamples);
+			if ( light->getIsSurface() ) nbShadowSamples = static_cast<float>( _nbLightSamples );
 
-			for ( unsigned int i = 0; i < _nbShadowSamples; ++i )
+			for ( unsigned int i = 0; i < nbShadowSamples; ++i )
 			{
 				const LightSample lightSample = light->sample( p_hitRecord._point );
 				Ray				  shadowRay( p_hitRecord._point, lightSample._direction );
 				shadowRay.offset( p_hitRecord._normal );
 
-				if ( !p_scene.intersectAny( shadowRay, 0, lightSample._distance ) )
+				if ( !p_scene.intersectAny( shadowRay, 0.f, lightSample._distance ) )
 				{
 					Vec3f colorMaterial	 = p_hitRecord._object->getMaterial()->shade( p_ray, p_hitRecord, lightSample );
 					const float cosTheta = std::max( glm::dot( p_hitRecord._normal, lightSample._direction ), 0.f );
 					tempColor += colorMaterial * lightSample._radiance * cosTheta;
 				}
 			}
-			color += ( tempColor / _nbShadowSamples );
+			color += ( tempColor / nbShadowSamples );
 		}
-		return color / static_cast<float>(p_scene.getLights().size());
+		return color / static_cast<float>( p_scene.getLights().size() );
 	}
+
+	void DirectLightingIntegrator::sampleVPL( const Scene & p_scene, const float p_tMax ) { return; }
 } // namespace RT_ISICG

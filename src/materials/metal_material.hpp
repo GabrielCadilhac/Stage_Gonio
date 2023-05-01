@@ -15,10 +15,8 @@ namespace RT_ISICG
 					   const float		   p_brillance,
 					   const float		   p_metalness,
 					   const Vec3f &	   p_specular )
-			: BaseMaterial( p_name ), _metalness(p_metalness), _orenNayarBRDF( p_diffuse, p_brillance ),
-			  _cookTorranceBRDF( p_diffuse,
-								 p_brillance,
-								 p_specular )
+			: BaseMaterial( p_name ), _metalness( p_metalness ), _orenNayarBRDF( p_diffuse, p_brillance ),
+			  _cookTorranceBRDF( p_diffuse, p_brillance, p_specular ), _specular(p_specular)
 		{
 		}
 
@@ -38,11 +36,13 @@ namespace RT_ISICG
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _orenNayarBRDF.getKd(); }
+		inline const Vec3f & getReflectivity() const override { return _specular; };
 
 	  protected:
 		OrenNayarBRDF	 _orenNayarBRDF;
 		CookTorranceBRDF _cookTorranceBRDF;
 		float			 _metalness;
+		Vec3f			 _specular;
 	};
 
 } // namespace RT_ISICG

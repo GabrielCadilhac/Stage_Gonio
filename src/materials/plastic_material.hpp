@@ -11,7 +11,7 @@ namespace RT_ISICG
 	{
 	  public:
 		PlasticMaterial( const std::string & p_name, const Vec3f & p_diffuse, const float p_brillance )
-			: BaseMaterial( p_name ), _lambertBRDF( p_diffuse ), _phongBRDF(p_diffuse, p_brillance)
+			: BaseMaterial( p_name ), _lambertBRDF( p_diffuse ), _phongBRDF( p_diffuse, p_brillance ), _specular(p_diffuse)
 		{
 		}
 
@@ -27,10 +27,12 @@ namespace RT_ISICG
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _lambertBRDF.getKd(); }
+		inline const Vec3f & getReflectivity() const override { return _specular; };
 
 	  protected:
 		LambertBRDF _lambertBRDF;
 		PhongBRDF	_phongBRDF;
+		Vec3f		_specular;
 	};
 
 } // namespace RT_ISICG

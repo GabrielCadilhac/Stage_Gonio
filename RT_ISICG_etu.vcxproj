@@ -161,12 +161,15 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\geometry\triangle_mesh_geometry.cpp" />
     <ClCompile Include="src\integrators\direct_lighting_integrator.cpp" />
     <ClCompile Include="src\integrators\ray_cast_integrator.cpp" />
+    <ClCompile Include="src\integrators\virtual_point_light_integrator.cpp" />
     <ClCompile Include="src\integrators\whitted_integrator.cpp" />
+    <ClCompile Include="src\lights\disk_light.cpp" />
     <ClCompile Include="src\lights\point_light.cpp" />
     <ClCompile Include="src\lights\quad_light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\transparent_material.cpp" />
     <ClCompile Include="src\objects\implicit_box_frame.cpp" />
+    <ClCompile Include="src\objects\implicit_octahedron.cpp" />
     <ClCompile Include="src\objects\implicit_sphere.cpp" />
     <ClCompile Include="src\objects\implicit_surface.cpp" />
     <ClCompile Include="src\objects\plane.cpp" />
@@ -194,8 +197,10 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\integrators\base_integrator.hpp" />
     <ClInclude Include="src\integrators\direct_lighting_integrator.hpp" />
     <ClInclude Include="src\integrators\ray_cast_integrator.hpp" />
+    <ClInclude Include="src\integrators\virtual_point_light_integrator.hpp" />
     <ClInclude Include="src\integrators\whitted_integrator.hpp" />
     <ClInclude Include="src\lights\base_light.hpp" />
+    <ClInclude Include="src\lights\disk_light.hpp" />
     <ClInclude Include="src\lights\light_sample.hpp" />
     <ClInclude Include="src\lights\point_light.hpp" />
     <ClInclude Include="src\lights\quad_light.hpp" />
@@ -211,6 +216,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\materials\transparent_material.hpp" />
     <ClInclude Include="src\objects\base_object.hpp" />
     <ClInclude Include="src\objects\implicit_box_frame.hpp" />
+    <ClInclude Include="src\objects\implicit_octahedron.hpp" />
     <ClInclude Include="src\objects\implicit_sphere.hpp" />
     <ClInclude Include="src\objects\implicit_surface.hpp" />
     <ClInclude Include="src\objects\plane.hpp" />

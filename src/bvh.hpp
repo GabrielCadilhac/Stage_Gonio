@@ -27,6 +27,12 @@ namespace RT_ISICG
 		unsigned int _lastTriangleId  = 0;
 	};
 
+	struct Bucket
+	{
+		int count = 0;
+		AABB bounds;
+	};
+
 	class BVH
 	{
 	  public:
@@ -57,12 +63,23 @@ namespace RT_ISICG
 							   const Ray &	   p_ray,
 							   const float	   p_tMin,
 							   const float	   p_tMax ) const;
+		
+		int _bestSplitIndex( const AABB &		p_aabb,
+						 const unsigned int p_firstTriangleId,
+						 const unsigned int p_lastTriangleId,
+						 const unsigned int p_dim ) const;
+
+		int _computeSAH( const AABB &		p_aabb,
+						 const unsigned int p_firstTriangleId,
+						 const unsigned int p_lastTriangleId, int & p_dim) const;
+
 	  private:
 		std::vector<TriangleMeshGeometry> * _triangles = nullptr;
 		BVHNode *							_root	   = nullptr;
 
 		const unsigned int _maxTrianglesPerLeaf = 8;
 		const unsigned int _maxDepth			= 32;
+		const int		   _nbBuckets			= 16;
 	};
 
 } // namespace RT_ISICG

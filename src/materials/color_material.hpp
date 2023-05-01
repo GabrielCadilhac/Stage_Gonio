@@ -21,6 +21,7 @@ namespace RT_ISICG
 		}
 
 		inline const Vec3f & getFlatColor() const override { return _color; }
+		inline const Vec3f & getReflectivity() const override { return VEC3F_ZERO; };
 
 	  protected:
 		Vec3f _color = Vec3f( 1.f );
