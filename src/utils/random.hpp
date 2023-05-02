@@ -14,15 +14,15 @@ namespace RT_ISICG
 	}
 
 	// Return a Halton sequence based number between 0 and 1
-	static inline double halton( const int p_base, int p_index )
+	static inline float halton( const int p_base, int p_index )
 	{
-		double x = 0.0, f = 1.0 / p_base;
+		float x = 0.f, f = 1.f / static_cast<float>(p_base);
 
 		while ( p_index )
 		{
-			x += f * static_cast<double>( p_index % p_base );
+			x += f * static_cast<float>( p_index % p_base );
 			p_index /= p_base;
-			f *= ( 1.0 / static_cast<double>( p_base ) );
+			f *= ( 1.f / static_cast<float>( p_base ) );
 		}
 
 		return x;

@@ -5,6 +5,7 @@
 #include "lights/point_light.hpp"
 #include "utils/random.hpp"
 #include <vector>
+#include "utils/convert.hpp"
 
 namespace RT_ISICG
 {
@@ -23,13 +24,10 @@ namespace RT_ISICG
 	  private:
 		Vec3f _VPLLighting( const Scene & p_scene, const HitRecord & p_hitRecord, const Ray & p_ray ) const;
 
-		void _computeVPL( const Scene &		p_scene,
-						  const float		p_tMax,
-						  const Vec3f &		p_position,
-						  const BaseLight * p_light );
+		Vec3f _sampleHemisphere( const Vec3f & p_normal ) const;
 
-		const int				  _nbVPL = 100;
-		const float				  _probaAbsorbed = 0.5f;
+		const int				  _nbVPL = 90;
+		const float				  _probaDiffuse = 0.1f;
 		std::vector<PointLight *> _VPLs;
 	};
 } // namespace RT_ISICG

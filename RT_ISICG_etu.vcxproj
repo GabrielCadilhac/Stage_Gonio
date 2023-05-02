@@ -228,6 +228,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\texture.hpp" />
     <ClInclude Include="src\utils\chrono.hpp" />
     <ClInclude Include="src\utils\console_progress_bar.hpp" />
+    <ClInclude Include="src\utils\convert.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="results\image.jpg" />

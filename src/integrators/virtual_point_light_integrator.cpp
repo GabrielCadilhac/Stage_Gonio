@@ -10,33 +10,24 @@ namespace RT_ISICG
 		HitRecord hitRecord;
 		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
 		{
-			Vec3f directColor = _directLighting( p_scene, hitRecord, p_ray );
-			Vec3f vplColor	  = _VPLLighting( p_scene, hitRecord, p_ray );
-			return 0.7f * directColor + 0.3f * vplColor;
+			const Vec3f directColor = _directLighting( p_scene, hitRecord, p_ray );
+			const Vec3f vplColor	= _VPLLighting( p_scene, hitRecord, p_ray );
+			return vplColor;
+			//return ( vplColor + directColor ) / 2.f;
 		}
 
 		return _backgroundColor;
 	}
 
-	void VirtualPointLightIntegrator::_computeVPL( const Scene &	 p_scene,
-												   const float		 p_tMax,
-												   const Vec3f &	 p_position,
-												   const BaseLight * p_light )
+	Vec3f VirtualPointLightIntegrator::_sampleHemisphere( const Vec3f & p_normal ) const
 	{
-		const Vec3f pointOnSphere = p_position + p_light->getPosition();
-		Ray			lightRay( pointOnSphere, glm::normalize( p_position ) );
+		const Vec3f randomVect = glm::normalize( Vec3f( randomFloat() * 2.f - 1.f, randomFloat() * 2.f - 1.f, 0.f ) );
+		const Vec3f tangent	   = glm::normalize( randomVect - p_normal * glm::dot( randomVect, p_normal ) );
+		const Vec3f bitangent  = glm::cross( p_normal, tangent );
+		const Mat3f TBN( tangent, bitangent, p_normal );
 
-		HitRecord hitRecord;
-		if ( p_scene.intersect( lightRay, 0.f, p_tMax, hitRecord ) )
-		{
-			const LightSample lightSample = p_light->sample( hitRecord._point );
-			const float		  radiance	  = p_light->getPower();
-			_VPLs.push_back(
-				new PointLight( hitRecord._point + hitRecord._normal, p_light->getFlatColor(), radiance ) );
-
-			const Vec3f reflectedDir = glm::reflect( lightRay.getDirection(), hitRecord._normal );
-			lightRay				 = Ray( hitRecord._point, reflectedDir );
-		}
+		const Vec3f sample = glm::normalize(Vec3f( randomFloat() * 2.f - 1.f, randomFloat() * 2.f - 1.f, randomFloat() ));
+		return TBN * sample;
 	}
 
 	void VirtualPointLightIntegrator::sampleVPL( const Scene & p_scene, const float p_tMax )
@@ -45,35 +36,40 @@ namespace RT_ISICG
 		{
 			if ( !light->getIsSurface() )
 			{
-				int	  start = _nbVPL, end = _nbVPL;
-				int	  reflections = 0;
+				int start = _nbVPL, end = _nbVPL;
+				int reflections = 0;
 
 				while ( end > 0 )
 				{
-					start *= _probaAbsorbed;
+					start = static_cast<int>( start * _probaDiffuse );
 
 					for ( int i = start; i < end; ++i )
 					{
-						const Vec2f y( halton( 2, i ), halton( 3, i ) );
+						Vec3f position
+							= light->getPosition() + ( polarToCartesian( halton( 2, i ), halton( 3, i ) ) );
 
-						const float x = glm::cos( TWO_PIf * y.x ) * 2.f * glm::sqrt( y.y * ( 1.f - y.y ) );
-						const float y = glm::sin( TWO_PIf * y.x ) * 2.f * glm::sqrt( y.y * ( 1.f - y.y ) );
-						const float z = 1.f - 2.f * y.y;
+						Vec3f direction
+							= glm::normalize( polarToCartesian( halton( 2, i ), halton( 3, i ) ) );
 
-						Vec3f position( x, y, z );
+						Ray reflectedRay( position, direction );
 
-						for ( int j = 0; j <= reflections; ++j )
+						HitRecord hitRecord;
+						if ( !p_scene.intersect( reflectedRay, 0.f, p_tMax, hitRecord ) ) continue;
+
+						const float newPower = light->getPower() / glm::pow( hitRecord._distance, 2.f );
+						_VPLs.push_back( new PointLight( position, light->getFlatColor(), newPower ) );
+
+						for ( int j = 1; j <= reflections; ++j )
 						{
-							_computeVPL( p_scene, p_tMax, position, light );
-
-							const Vec2f dir( glm::asin( glm::sqrt( halton( 2 * j + 2, i ) ) ),
-											 TWO_PIf * halton( 2 * j + 3, i ) );
-
-							Ray			reflectedRay( position, glm::normalize( dir ) );
-
-							HitRecord hitRecord;
 							if ( p_scene.intersect( reflectedRay, 0.f, p_tMax, hitRecord ) )
-								position = hitRecord._point;
+							{
+								const LightSample lightSample = light->sample( hitRecord._point );
+								position					  = hitRecord._point + hitRecord._normal;
+								direction = _sampleHemisphere( hitRecord._normal );
+								reflectedRay		 = Ray( position, direction );
+								const float newPower = light->getPower() / glm::pow( hitRecord._distance, 2.f );
+								_VPLs.push_back( new PointLight( position, light->getFlatColor(), newPower ) );
+							}
 							else
 								break;
 						}
@@ -91,9 +87,9 @@ namespace RT_ISICG
 													 const Ray &	   p_ray ) const
 	{
 		Vec3f		color	  = VEC3F_ZERO;
-		const Vec3f flatColor = p_hitRecord._object->getMaterial()->getFlatColor() / PIf;
+		const Vec3f flatColor = p_hitRecord._object->getMaterial()->getFlatColor();
 		const float N		  = static_cast<float>( _VPLs.size() );
-		//Ajouter la couleur L et l'atténuation w dans une classe VPL héritant de PointLight
+		// Ajouter la couleur L et l'atténuation w dans une classe VPL héritant de PointLight
 		for ( PointLight * light : _VPLs )
 		{
 			const LightSample lightSample = light->sample( p_hitRecord._point );
