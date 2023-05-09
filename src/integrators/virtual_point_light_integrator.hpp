@@ -15,20 +15,26 @@ namespace RT_ISICG
 		VirtualPointLightIntegrator() : DirectLightingIntegrator() {}
 		virtual ~VirtualPointLightIntegrator() = default;
 
-		const IntegratorType getType() const override { return IntegratorType::VIRTUAL_POINT_LIGHT; };
+		const IntegratorType getType() const override { return IntegratorType::VIRTUAL_POINT_LIGHT; }
 
 		Vec3f Li( const Scene & p_scene, const Ray & p_ray, const float p_tMin, const float p_tMax ) const override;
 
-		void sampleVPL( const Scene & p_scene, const float p_tMax ) override;
+		void sampleVPL( const Scene & p_scene, const float p_tMax );
+		inline void addHitRecordSample( HitRecord * p_hitRecord ) { _hitRecordSamples.push_back( p_hitRecord ); };
 
 	  private:
 		Vec3f _VPLLighting( const Scene & p_scene, const HitRecord & p_hitRecord, const Ray & p_ray ) const;
 
-		Vec3f _sampleHemisphere( const Vec3f & p_normal ) const;
+		float _computeAcceptanceProbability( const PointLight * p_light, const float p_totalLuminance ) const;
+		float _totalLuminance( const Scene & p_scene ) const;
 
-		const int				  _nbVPL = 90;
-		const float				  _probaDiffuse = 0.1f;
-		std::vector<PointLight *> _VPLs;
+		const int					   _nbVPL			   = 80;
+		const float					   _probaDiffuse	   = 0.f;
+		const int					   _nbHitRecordSamples = 100;
+		const float					   _epsilon			   = 0.05f;
+		
+		std::vector<PointLight *>	   _VPLs;
+		std::vector<HitRecord *> _hitRecordSamples;
 	};
 } // namespace RT_ISICG
 

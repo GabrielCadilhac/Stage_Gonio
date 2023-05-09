@@ -44,12 +44,13 @@ namespace RT_ISICG
 		bool intersect( const Ray & p_ray, const float p_tMin, const float p_tMax, HitRecord & p_hitRecord ) const;
 		bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const;
 
-	  private:
 		void _addObject( BaseObject * p_object );
+		void _attachMaterialToObject( const std::string & p_materialName, const std::string & p_objectName );
+
+	  private:
 		void _addMaterial( BaseMaterial * p_material );
 		void _addLight( BaseLight * p_light );
 
-		void _attachMaterialToObject( const std::string & p_materialName, const std::string & p_objectName );
 
 	  private:
 		ObjectMap	_objectMap;

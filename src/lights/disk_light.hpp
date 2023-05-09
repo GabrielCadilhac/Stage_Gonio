@@ -1,8 +1,9 @@
-#ifndef __RT_ISICG_DISC_LIGHT__
-#define __RT_ISICG_DISC_LIGHT__
+#ifndef __RT_ISICG_DISK_LIGHT__
+#define __RT_ISICG_DISK_LIGHT__
 
 #include "base_light.hpp"
 #include "utils/random.hpp"
+#include "ray.hpp"
 
 namespace RT_ISICG
 {
@@ -25,6 +26,7 @@ namespace RT_ISICG
 		};
 
 		virtual LightSample sample( const Vec3f & p_point ) const;
+		virtual Ray	sampleLightRay( const int p_i ) const;
 
 	  private:
 		Vec2f _sampleGeometry() const;
@@ -36,4 +38,4 @@ namespace RT_ISICG
 	};
 } // namespace RT_ISICG
 
-#endif // !__RT_ISICG_DISC_LIGHT__
+#endif // !__RT_ISICG_DISK_LIGHT__

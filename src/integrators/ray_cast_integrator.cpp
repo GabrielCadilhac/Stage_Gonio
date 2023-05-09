@@ -14,6 +14,4 @@ namespace RT_ISICG
 		const float cosTheta = std::max( glm::dot( -p_ray.getDirection(), hitRecord._normal ), 0.f );
 		return hitRecord._object->getMaterial()->getFlatColor() * cosTheta;
 	}
-
-	void RayCastIntegrator::sampleVPL( const Scene & p_scene, const float p_tMax ) { return; };
 } // namespace RT_ISICG

@@ -43,6 +43,4 @@ namespace RT_ISICG
 		}
 		return color / static_cast<float>( p_scene.getLights().size() );
 	}
-
-	void DirectLightingIntegrator::sampleVPL( const Scene & p_scene, const float p_tMax ) { return; }
 } // namespace RT_ISICG

@@ -8,9 +8,9 @@ namespace RT_ISICG
 
 	static Vec3f polarToCartesian( const float p_theta, const float p_phi )
 	{
-		const float x = glm::cos( TWO_PIf * p_theta ) * 2.f * glm::sqrt( p_phi * ( 1.f - p_phi ) );
-		const float y = glm::sin( TWO_PIf * p_theta ) * 2.f * glm::sqrt( p_phi * ( 1.f - p_phi ) );
-		const float z = 1.f - 2.f * p_phi;
+		const float x = glm::cos( p_phi ) * glm::sin( p_theta );
+		const float y = glm::cos( p_theta );
+		const float z = glm::sin( p_phi ) * glm::sin(p_theta);
 		return Vec3f( x, y, z );
 	}
 

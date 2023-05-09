@@ -2,6 +2,7 @@
 #define __RT_ISICG_RANDOM__
 
 #include <random>
+#include "utils/convert.hpp"
 
 namespace RT_ISICG
 {
@@ -26,6 +27,12 @@ namespace RT_ISICG
 		}
 
 		return x;
+	}
+
+	static inline Vec3f sampleHemisphere( const Vec3f & p_normal, const float theta, const float phi )
+	{
+		const Vec3f direction = polarToCartesian( theta, phi );
+		return glm::dot( direction, glm::normalize( p_normal ) ) < 0.f ? direction : -direction;
 	}
 
 } // namespace RT_ISICG

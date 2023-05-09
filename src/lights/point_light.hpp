@@ -1,5 +1,5 @@
-#ifndef __POINT_LIGHT_HPP__
-#define __POINT_LIGHT_HPP__
+#ifndef __RT_ISICG_POINT_LIGHT_HPP__
+#define __RT_ISICG_POINT_LIGHT_HPP__
 
 #include "base_light.hpp"
 #include "utils/random.hpp"
@@ -7,6 +7,7 @@
 #include "ray.hpp"
 #include "hit_record.hpp"
 #include "scene.hpp"
+#include "utils/convert.hpp"
 
 namespace RT_ISICG
 {
@@ -20,7 +21,9 @@ namespace RT_ISICG
 			: BaseLight( p_color, p_position, p_power ) {};
 
 		virtual LightSample sample( const Vec3f & p_point ) const;
+
+		virtual Ray sampleLightRay( const int p_i ) const;
 	};
 } // namespace RT_ISICG
 
-#endif // __POINT_LIGHT_HPP__
+#endif // __RT_ISICG_POINT_LIGHT_HPP__

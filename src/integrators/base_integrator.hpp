@@ -2,6 +2,7 @@
 #define __RT_ISICG_BASE_INTEGRATOR__
 
 #include "scene.hpp"
+#include "cameras/base_camera.hpp"
 
 namespace RT_ISICG
 {
@@ -24,8 +25,6 @@ namespace RT_ISICG
 
 		// Return incoming luminance.
 		virtual Vec3f Li( const Scene & p_scene, const Ray & p_ray, const float p_tMin, const float p_tMax ) const = 0;
-
-		virtual void sampleVPL( const Scene & p_scene, const float p_tMax ) = 0;
 
 		const Vec3f &	  getBackgroundColor() const { return _backgroundColor; }
 		void			  setBackgroundColor( const Vec3f & p_color ) { _backgroundColor = p_color; }

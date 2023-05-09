@@ -11,15 +11,13 @@ namespace RT_ISICG
 		DirectLightingIntegrator() : BaseIntegrator() {}
 		virtual ~DirectLightingIntegrator() = default;
 
-		const IntegratorType getType() const override { return IntegratorType::DIRECT_LIGHTING; };
+		const IntegratorType getType() const override { return IntegratorType::DIRECT_LIGHTING; }
 
 		Vec3f Li( const Scene & p_scene, const Ray & p_ray, const float p_tMin, const float p_tMax ) const override;
-
-		void sampleVPL( const Scene & p_scene, const float p_tMax ) override;
 
 	  protected:
 		Vec3f _directLighting( const Scene & p_scene, const HitRecord & p_hitRecord, const Ray & p_ray ) const;
 	};
 } // namespace RT_ISICG
 
-#endif // __DIRECT_LIGHTING_INTEGRATOR_HPP__
+#endif // __RT_ISICG_DIRECT_LIGHTING_INTEGRATOR__

@@ -113,10 +113,10 @@ namespace RT_ISICG
 		//loadFileTriangleMesh( "UVsphere", DATA_PATH + "uvsphere.obj" );
 		//_attachMaterialToObject( "CyanColor", "UVsphere_defaultobject" );
 
-		_addObject( new Sphere( "Sphere1", Vec3f( -2.f, 0.f, 3.f ), 1.5f ) );
-		_attachMaterialToObject( "CyanColor", "Sphere1" );
-		_addObject( new Sphere( "Sphere2", Vec3f( 2.f, 0.f, 3.f ), 1.5f ) );
-		_attachMaterialToObject( "CyanColor", "Sphere2" );
+		//_addObject( new Sphere( "Sphere1", Vec3f( -2.f, 0.f, 3.f ), 1.5f ) );
+		//_attachMaterialToObject( "CyanColor", "Sphere1" );
+		//_addObject( new Sphere( "Sphere2", Vec3f( 2.f, 0.f, 3.f ), 1.5f ) );
+		//_attachMaterialToObject( "CyanColor", "Sphere2" );
 
 		// Pseudo Cornell box made with infinite planes .
 		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
@@ -293,7 +293,9 @@ namespace RT_ISICG
 		_addObject( new Plane( "PlaneRear", Vec3f( 0.f, 0.f, -10.f ), Vec3f( 0.f, 0.f, 1.f ) ) );
 		_attachMaterialToObject( "YellowColor", "PlaneRear" );
 
-		_addLight( new PointLight( Vec3f( 0.f, 5.f, 0.f ), WHITE, 100.f ) );
+		//_addLight( new PointLight( Vec3f( 0.f, 4.f, 0.f ), WHITE, 100.f ) );
+		_addLight( new QuadLight(
+			Vec3f( 1.f, 5.0f, -2.0f ), Vec3f( -2.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, 2.f ), WHITE, 80.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

@@ -53,12 +53,32 @@ namespace RT_ISICG
 		Chrono			   chrono;
 		ConsoleProgressBar progressBar;
 
-		// Raycast pour calculer la lumière du point d'intersection
+		//Generate _nbCameraSample from Virtual Point Light Integrator to compute phi total
+		if ( _integrator->getType() == IntegratorType::VIRTUAL_POINT_LIGHT )
+		{
+			VirtualPointLightIntegrator * vplIntegrator = dynamic_cast<VirtualPointLightIntegrator *>( _integrator );
+
+			int nbCameraSample = 0;
+			while ( nbCameraSample < 100 )
+			{
+				const float sx	= randomFloat() * width;
+				const float sy	= randomFloat() * height;
+				const Ray	ray = p_camera->generateRay( sx, sy );
+
+				HitRecord hitRecord;
+				if ( p_scene.intersect( ray, distMin, distMax, hitRecord ) )
+				{
+					nbCameraSample++;
+					vplIntegrator->addHitRecordSample( &hitRecord );
+				}
+			}
+
+			vplIntegrator->sampleVPL( p_scene, distMax );
+		}
+
 
 		progressBar.start( height, 50 );
 		chrono.start();
-
-		_integrator->sampleVPL( p_scene, distMax );
 
 		const float pixelWidth	= ( 1.f / (float)( width - 1.f ) );
 		const float pixelHeight = ( 1.f / (float)( height - 1.f ) );
