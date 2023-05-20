@@ -2,6 +2,7 @@
 #define __RT_ISICG_BASE_LIGHT__
 
 #include "light_sample.hpp"
+#include "ray.hpp"
 
 namespace RT_ISICG
 {
@@ -15,11 +16,11 @@ namespace RT_ISICG
 		virtual ~BaseLight() = default;
 
 		inline const Vec3f & getFlatColor() const { return _color; };
-		inline const bool    getIsSurface() const { return _isSurface; };
-		inline const Vec3f & getPosition()  const { return _position; };
-		inline const float	 getPower()     const { return _power; };
+		inline const bool	 getIsSurface() const { return _isSurface; };
+		inline const Vec3f & getPosition() const { return _position; };
+		inline const float	 getPower() const { return _power; };
 
-		//virtual Ray sampleLightRay( const int p_i ) const = 0;
+		virtual Ray			sampleLightRay( const float p_theta, const float p_phi ) const = 0;
 		virtual LightSample sample( const Vec3f & p_point ) const = 0;
 
 	  protected:

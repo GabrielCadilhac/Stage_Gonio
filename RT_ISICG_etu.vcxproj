@@ -163,11 +163,14 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\integrators\ray_cast_integrator.cpp" />
     <ClCompile Include="src\integrators\virtual_point_light_integrator.cpp" />
     <ClCompile Include="src\integrators\whitted_integrator.cpp" />
+    <ClCompile Include="src\kd_tree.cpp" />
     <ClCompile Include="src\lights\disk_light.cpp" />
     <ClCompile Include="src\lights\point_light.cpp" />
     <ClCompile Include="src\lights\quad_light.cpp" />
+    <ClCompile Include="src\light_tree.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\materials\transparent_material.cpp" />
+    <ClCompile Include="src\objects\hexagonal_prism_implicit.cpp" />
     <ClCompile Include="src\objects\implicit_box_frame.cpp" />
     <ClCompile Include="src\objects\implicit_octahedron.cpp" />
     <ClCompile Include="src\objects\implicit_sphere.cpp" />
@@ -199,11 +202,13 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\integrators\ray_cast_integrator.hpp" />
     <ClInclude Include="src\integrators\virtual_point_light_integrator.hpp" />
     <ClInclude Include="src\integrators\whitted_integrator.hpp" />
+    <ClInclude Include="src\kd_tree.hpp" />
     <ClInclude Include="src\lights\base_light.hpp" />
     <ClInclude Include="src\lights\disk_light.hpp" />
     <ClInclude Include="src\lights\light_sample.hpp" />
     <ClInclude Include="src\lights\point_light.hpp" />
     <ClInclude Include="src\lights\quad_light.hpp" />
+    <ClInclude Include="src\light_tree.hpp" />
     <ClInclude Include="src\materials\color_material.hpp" />
     <ClInclude Include="src\defines.hpp" />
     <ClInclude Include="src\io\stb_include.hpp" />
@@ -215,6 +220,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\materials\plastic_material.hpp" />
     <ClInclude Include="src\materials\transparent_material.hpp" />
     <ClInclude Include="src\objects\base_object.hpp" />
+    <ClInclude Include="src\objects\hexagonal_prism_implicit.hpp" />
     <ClInclude Include="src\objects\implicit_box_frame.hpp" />
     <ClInclude Include="src\objects\implicit_octahedron.hpp" />
     <ClInclude Include="src\objects\implicit_sphere.hpp" />

@@ -17,10 +17,10 @@ namespace RT_ISICG
 		return LightSample( rayDirection, distance, ( _color * _power ) / newPDF, newPDF );
 	}
 
-	Ray QuadLight::sampleLightRay( const int p_i ) const
+	Ray QuadLight::sampleLightRay( const float p_theta, const float p_phi ) const
 	{
 		const Vec3f randomPos = _position + randomFloat() * _u + randomFloat() * _v;
-		const Vec3f direction = sampleHemisphere( _n, halton( 2, p_i ), halton( 3, p_i ) );
+		const Vec3f direction = sampleHemisphere( -_n, p_theta, p_phi );
 		return Ray( randomPos, direction );
 	}
 

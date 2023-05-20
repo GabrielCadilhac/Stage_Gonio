@@ -47,8 +47,8 @@ namespace RT_ISICG
 		const int width	 = p_texture.getWidth();
 		const int height = p_texture.getHeight();
 
-		const float distMin = 0.1f;
-		const float distMax = 100.f;
+		const float distMin = 0.0001f;
+		const float distMax = 100000.f;
 
 		Chrono			   chrono;
 		ConsoleProgressBar progressBar;
@@ -74,8 +74,15 @@ namespace RT_ISICG
 			}
 
 			vplIntegrator->sampleVPL( p_scene, distMax );
+			const float sx	= randomFloat() * width;
+			const float sy	= randomFloat() * height;
+			const Ray	ray = p_camera->generateRay( sx, sy );
+			HitRecord	hitRecord;
+			if ( p_scene.intersect( ray, distMin, distMax, hitRecord ) )
+			{
+				vplIntegrator->lightCutsLighting( p_scene, hitRecord, ray );
+			}
 		}
-
 
 		progressBar.start( height, 50 );
 		chrono.start();

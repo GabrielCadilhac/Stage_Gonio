@@ -3,6 +3,7 @@
 
 #include "direct_lighting_integrator.hpp"
 #include "lights/point_light.hpp"
+#include "light_tree.hpp"
 #include "utils/random.hpp"
 #include <vector>
 #include "utils/convert.hpp"
@@ -22,19 +23,22 @@ namespace RT_ISICG
 		void sampleVPL( const Scene & p_scene, const float p_tMax );
 		inline void addHitRecordSample( HitRecord * p_hitRecord ) { _hitRecordSamples.push_back( p_hitRecord ); };
 
+		void lightCutsLighting( const Scene & p_scene, const HitRecord & p_hitRecord, const Ray & p_ray ) const;
+
 	  private:
 		Vec3f _VPLLighting( const Scene & p_scene, const HitRecord & p_hitRecord, const Ray & p_ray ) const;
 
 		float _computeAcceptanceProbability( const PointLight * p_light, const float p_totalLuminance ) const;
 		float _totalLuminance( const Scene & p_scene ) const;
 
-		const int					   _nbVPL			   = 80;
-		const float					   _probaDiffuse	   = 0.f;
+		const int					   _nbVPL			   = 100;
+		const float					   _probaDiffuse	   = 0.2f;
 		const int					   _nbHitRecordSamples = 100;
 		const float					   _epsilon			   = 0.05f;
 		
 		std::vector<PointLight *>	   _VPLs;
 		std::vector<HitRecord *> _hitRecordSamples;
+		LightTree					   _lightTree;
 	};
 } // namespace RT_ISICG
 

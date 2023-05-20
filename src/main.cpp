@@ -2,6 +2,11 @@
 #include "defines.hpp"
 #include "renderer.hpp"
 
+//A supprimer
+#include "kd_tree.hpp"
+#include "light_tree.hpp"
+#include "lights/point_light.hpp"
+
 namespace RT_ISICG
 {
 	int main( int argc, char ** argv )
@@ -9,8 +14,8 @@ namespace RT_ISICG
 		const int imgWidth	= 600;
 		const int imgHeight = 400;
 
-		const Vec3f cameraPosition( 0.f, 2.f, -10.f );
-		const Vec3f cameraLookAt( 0.f, 2.0f, 1.f);
+		const Vec3f cameraPosition( 0.f, 2.f, -6.f );
+		const Vec3f cameraLookAt( 0.f, 1.f, 79.f);
 		const float aspectRatio = float( imgWidth ) / imgHeight;
 
 		// Create a texture to render the scene.
@@ -19,8 +24,8 @@ namespace RT_ISICG
 		// Create and init scene.
 		Scene scene;
 
-		// Changer le .init_tp en fonction du numéro du tp souhaité
-		scene.projet();
+		// Changer le .init_tp en fonction du tp souhaité
+		scene.init_tp7();
 
 		// Create a perspective camera.
 		//PerspectiveCamera camera( aspectRatio );
@@ -30,9 +35,9 @@ namespace RT_ISICG
 
 		// Create and setup the renderer.
 		Renderer renderer;
-		renderer.setIntegrator( IntegratorType::VIRTUAL_POINT_LIGHT );
+		renderer.setIntegrator( IntegratorType::WHITTED );
 		renderer.setBackgroundColor( GREY );
-		renderer.setNbPixelSamples( 1 );
+		renderer.setNbPixelSamples( 8 );
 		renderer.setNbLightSamples( 1 );
 
 		// Launch rendering.

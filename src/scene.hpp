@@ -24,13 +24,13 @@ namespace RT_ISICG
 
 		// Hard coded initialization.
 		void init();
-		void init_tp1();
 		void init_tp2();
 		void init_tp3();
 		void init_tp4();
 		void init_tp5();
 		void init_tp6();
 		void init_tp7();
+		void init_conference();
 		void projet();
 
 		// Initialization from file.

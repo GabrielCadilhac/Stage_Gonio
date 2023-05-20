@@ -21,11 +21,11 @@ namespace RT_ISICG
 		return r * Vec2f( glm::cos( theta ), glm::sin( theta ) );
 	}
 
-	Ray DiskLight::sampleLightRay( const int p_i ) const
+	Ray DiskLight::sampleLightRay( const float p_theta, const float p_phi ) const
 	{
 		const Vec2f randomDiskPoint = _sampleGeometry();
 		const Vec3f randomPos		= _position + _u * randomDiskPoint.x + _v * randomDiskPoint.y;
-		const Vec3f direction		= sampleHemisphere( _normal, halton( 2, p_i ), halton( 3, p_i ) );
+		const Vec3f direction		= sampleHemisphere( _normal, p_theta, p_phi );
 		return Ray(randomPos, direction);
 	}
 

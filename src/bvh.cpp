@@ -3,6 +3,8 @@
 #include "objects/triangle_mesh.hpp"
 #include "utils/chrono.hpp"
 
+#define USE_SAH
+
 namespace RT_ISICG
 {
 	void BVH::build( std::vector<TriangleMeshGeometry> * p_triangles )
@@ -54,9 +56,8 @@ namespace RT_ISICG
 		if ( nbTriangles > _maxTrianglesPerLeaf && p_depth < _maxDepth )
 		{
 			int			nbBuckets	 = _nbBuckets;
-			const int	axePartition = static_cast<int>( p_node->_aabb.largestAxis() );
-			//int			axePartition = -1;
-			const int	splitIndex	 = -1; //_computeSAH( p_node->_aabb, p_firstTriangleId, p_lastTriangleId, axePartition );
+			int	axePartition = static_cast<int>( p_node->_aabb.largestAxis() );
+			const int	splitIndex	 = _bestSplitIndex( p_node->_aabb, p_firstTriangleId, p_lastTriangleId, axePartition );
 			const Vec3f centre		 = p_node->_aabb.centroid();
 			const float milieu		 = centre[ axePartition ];
 
@@ -65,12 +66,14 @@ namespace RT_ISICG
 				_triangles->begin() + p_lastTriangleId,
 				[ splitIndex, axePartition, p_node, nbBuckets, milieu ]( const TriangleMeshGeometry & triangle )
 				{
-					//int b = nbBuckets
-					//		* static_cast<int>(
-					//			p_node->_aabb.relativePosition( triangle.getAABB().centroid() )[ axePartition ] );
-					//if ( b == nbBuckets ) b = nbBuckets - 1;
-					//return b <= splitIndex;
-					 return triangle.getAABB().centroid()[ axePartition ] <= milieu;
+#ifdef USE_SAH
+					int b = static_cast<int>(
+						nbBuckets * p_node->_aabb.relativePosition( triangle.getAABB().centroid() )[ axePartition ] );
+					if ( b == nbBuckets ) b = nbBuckets - 1;
+					return b <= splitIndex;
+#else
+					return triangle.getAABB().centroid()[ axePartition ] <= milieu;
+#endif // USE_SAH
 				} );
 
 			const unsigned int idPartition = static_cast<unsigned int>( pt - _triangles->begin() );
@@ -164,38 +167,21 @@ namespace RT_ISICG
 			   || _intersectAnyRec( p_node->_right, p_ray, p_tMin, p_tMax );
 	}
 
-	int BVH::_computeSAH( const AABB &		 p_aabb,
-						  const unsigned int p_firstTriangleId,
-						  const unsigned int p_lastTriangleId,
-						  int &				 p_dim ) const
-	{
-		const int index0 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 0 );
-		const int index1 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 1 );
-		const int index2 = _bestSplitIndex( p_aabb, p_firstTriangleId, p_lastTriangleId, 2 );
-		const int index	 = glm::min( index0, glm::min( index1, index2 ) );
-
-		if ( index == index0 )
-			p_dim = 0;
-		else if ( index == index1 )
-			p_dim = 1;
-		else
-			p_dim = 2;
-
-		return index;
-	}
-
 	int BVH::_bestSplitIndex( const AABB &		 p_aabb,
 							  const unsigned int p_firstTriangleId,
 							  const unsigned int p_lastTriangleId,
 							  const unsigned int p_dim ) const
 	{
 		Bucket * buckets = new Bucket[ _nbBuckets ];
+		for ( int i = 0; i < _nbBuckets; ++i )
+			buckets[ i ] = Bucket();
 
 		// Compute buckets
 		for ( unsigned int i = p_firstTriangleId; i < p_lastTriangleId; ++i )
 		{
-			TriangleMeshGeometry triangle = ( *_triangles )[ i ];
-			int b = _nbBuckets * static_cast<int>( p_aabb.relativePosition( triangle.getAABB().centroid() )[ p_dim ] );
+			TriangleMeshGeometry triangle		  = ( *_triangles )[ i ];
+			Vec3f				 relativePosition = p_aabb.relativePosition( triangle.getAABB().centroid() );
+			int					 b				  = static_cast<int>( _nbBuckets * relativePosition[ p_dim ] );
 			if ( b == _nbBuckets ) b = _nbBuckets - 1;
 			buckets[ b ].count++;
 			buckets[ b ].bounds.extend( triangle.getAABB() );
@@ -203,9 +189,6 @@ namespace RT_ISICG
 
 		// Compute costs
 		float * costs = new float[ _nbBuckets ];
-		for ( int i = 0; i < _nbBuckets - 1; ++i )
-			costs[ i ] = 0.f;
-
 		for ( int i = 0; i < _nbBuckets - 1; ++i )
 		{
 			AABB b0, b1;
@@ -220,7 +203,8 @@ namespace RT_ISICG
 				b1.extend( buckets[ j ].bounds );
 				count1 += buckets[ j ].count;
 			}
-			costs[ i ] += 0.125f + ( count0 * b0.surfaceArea() + count1 * b1.surfaceArea() ) / p_aabb.surfaceArea();
+			costs[ i ]	= 0.125f + ( count0 * b0.surfaceArea() + count1 * b1.surfaceArea() ) / p_aabb.surfaceArea();
+			float temp2 = costs[ i ];
 		}
 
 		// Search for the min cost
@@ -234,6 +218,9 @@ namespace RT_ISICG
 				minCostSplitIndex = i;
 			}
 		}
+
+		delete[] buckets;
+		delete[] costs;
 
 		return minCostSplitIndex;
 	}

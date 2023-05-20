@@ -49,7 +49,9 @@ namespace RT_ISICG
 		inline float surfaceArea() const
 		{
 			const Vec3f d = _max - _min;
-			return 2.f * ( d.x * d.y + d.x * d.z + d.y * d.z );
+			const float area = 2.f * ( d.x * d.y + d.x * d.z + d.y * d.z );
+			if ( isinf( area ) ) return FLT_MAX;
+			return area;
 		}
 
 		//Returns the relative position of p_point from AABB bottom-left corner
@@ -78,6 +80,9 @@ namespace RT_ISICG
 		}
 
 		bool intersect( const Ray & p_ray, const float p_tMin, const float p_tMax ) const;
+
+		//Retourne la distance minimale entre l'origine du rayon et l'AABB
+		float intersectDistance( const Ray & p_ray, const float p_tMin, const float p_tMax ) const;
 
 	  private:
 		Vec3f _min = Vec3f( FLT_MAX );

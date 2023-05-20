@@ -26,7 +26,7 @@ namespace RT_ISICG
 
 		virtual LightSample sample( const Vec3f & p_point ) const;
 
-		virtual Ray sampleLightRay( const int p_i ) const;
+		virtual Ray sampleLightRay( const float p_theta, const float p_phi ) const;
 
 	  private:
 		Vec3f _u;

@@ -13,10 +13,10 @@ namespace RT_ISICG
 		return LightSample( direction, distance, radiance, 1.f );
 	}
 
-	Ray PointLight::sampleLightRay( const int p_i ) const
+	Ray PointLight::sampleLightRay( const float p_theta, const float p_phi ) const
 	{
 		Vec3f direction
-			= glm::normalize( polarToCartesian( TWO_PIf * halton( 2, p_i ), glm::acos( 1.f - 2.f * halton( 3, p_i ) ) ) );
+			= glm::normalize( polarToCartesian( TWO_PIf * p_theta, glm::acos( 1.f - 2.f * p_phi ) ) );
 		return Ray( _position, direction );
 	}
 } // namespace RT_ISICG
