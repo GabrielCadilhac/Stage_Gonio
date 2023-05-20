@@ -92,10 +92,12 @@ namespace RT_ISICG
 							 const float	 p_tMax,
 							 HitRecord &	 p_hitRecord ) const
 	{
+
 		if ( !p_node->_aabb.intersect( p_ray, p_tMin, p_tMax ) ) return false;
 
 		if ( p_node->isLeaf() )
 		{
+
 			float  tClosest = p_tMax;
 			float  uClosest = 0.f;
 			float  vClosest = 0.f;

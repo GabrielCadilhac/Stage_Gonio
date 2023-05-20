@@ -224,7 +224,6 @@ namespace RT_ISICG
 		const std::string DATA_PATH = "./data/conference/";
 
 		 loadFileTriangleMesh( "Conference", DATA_PATH + "conference.obj" );
-		_addObject( new Plane( "Plane", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
 
 		 _addLight( new QuadLight(
 			 Vec3f( 900.f, 600.f, -300.f ), Vec3f( -800.f, 0.f, 0.f ), Vec3f( 0.0f, 0.0f, 300.f ), WHITE, 20.f ) );

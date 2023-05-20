@@ -74,14 +74,14 @@ namespace RT_ISICG
 			}
 
 			vplIntegrator->sampleVPL( p_scene, distMax );
-			const float sx	= randomFloat() * width;
-			const float sy	= randomFloat() * height;
-			const Ray	ray = p_camera->generateRay( sx, sy );
-			HitRecord	hitRecord;
-			if ( p_scene.intersect( ray, distMin, distMax, hitRecord ) )
-			{
-				vplIntegrator->lightCutsLighting( p_scene, hitRecord, ray );
-			}
+			//const float sx	= randomFloat() * width;
+			//const float sy	= randomFloat() * height;
+			//const Ray	ray = p_camera->generateRay( sx, sy );
+			//HitRecord	hitRecord;
+			//if ( p_scene.intersect( ray, distMin, distMax, hitRecord ) )
+			//{
+			//	vplIntegrator->lightCutsLighting( p_scene, hitRecord, ray );
+			//}
 		}
 
 		progressBar.start( height, 50 );
