@@ -1,7 +1,7 @@
 #include "virtual_point_light_integrator.hpp"
 #include "objects/sphere.hpp"
 
-#define ACCEPT_PROBA 0.2f
+#define ACCEPT_PROBA 0.4f
 
 namespace RT_ISICG
 {
@@ -27,16 +27,17 @@ namespace RT_ISICG
 		// Phi(i)
 		float pixelContribution = 0.f;
 
-		for ( const HitRecord * hitRecord : _hitRecordSamples )
-			pixelContribution += p_light->getPower() / glm::distance( p_light->getPosition(), hitRecord->_point );
+		for ( const HitRecord & hitRecord : _hitRecordSamples )
+			pixelContribution += p_light->getPower() / glm::distance(p_light->getPosition(), hitRecord._point);
 
 		pixelContribution /= _nbHitRecordSamples;
 
 		// Acceptance Probability
-		return std::min( ( pixelContribution / p_totalLuminance ) + _epsilon, 1.f );
+		float temp = std::min( ( pixelContribution / p_totalLuminance ) + _epsilon, 1.f );
+		return temp;
 	}
 
-	float VirtualPointLightIntegrator::_totalLuminance( const Scene & p_scene ) const
+	float VirtualPointLightIntegrator::_totalLuminance( const Scene & p_scene, const float p_tMin, const float p_tMax ) const
 	{
 		// Generate 50 VPLs randomly
 		int				  nbVPL			 = 0;
@@ -44,28 +45,26 @@ namespace RT_ISICG
 		const BaseLight * light			 = p_scene.getLights()[ 0 ];
 		while ( nbVPL < 50 )
 		{
-			Vec3f direction
-				= glm::normalize( polarToCartesian( TWO_PIf * randomFloat(), glm::acos( 1.f - 2.f * randomFloat() ) ) );
-			Ray reflectedRay( light->getPosition(), direction );
+			Ray reflectedRay = light->sampleLightRay(randomFloat(), randomFloat());
 
 			HitRecord hitRecord;
-			if ( p_scene.intersect( reflectedRay, 0.01f, 100.f, hitRecord ) )
+			if ( p_scene.intersect( reflectedRay, p_tMin, p_tMax, hitRecord ) )
 			{
 				nbVPL++;
 
 				// Compute luminance for _nbHitRecordSamples pixels from VPLs calculated
 				const float power = light->getPower();
-				for ( const HitRecord * hitRecord : _hitRecordSamples )
-					totalLuminance += power / glm::distance( light->getPosition(), hitRecord->_point );
+				for ( const HitRecord & hitRecord : _hitRecordSamples )
+					totalLuminance += power / glm::pow(glm::distance( light->getPosition(), hitRecord._point ), 2.f);
 			}
 		}
 
 		return totalLuminance / ( 50.f * _nbHitRecordSamples );
 	}
 
-	void VirtualPointLightIntegrator::sampleVPL( const Scene & p_scene, const float p_tMax )
+	void VirtualPointLightIntegrator::sampleVPL( const Scene & p_scene, const float p_tMin, const float p_tMax )
 	{
-		const float totalLuminance = _totalLuminance( p_scene );
+		const float totalLuminance = _totalLuminance( p_scene, p_tMin, p_tMax );
 
 		for ( BaseLight * light : p_scene.getLights() )
 		{
@@ -81,7 +80,7 @@ namespace RT_ISICG
 					Ray reflectedRay = light->sampleLightRay( halton(2, i), halton(3, i) );
 
 					HitRecord hitRecord;
-					if ( !p_scene.intersect( reflectedRay, 0.01f, p_tMax, hitRecord ) ) continue;
+					if ( !p_scene.intersect( reflectedRay, p_tMin, p_tMax, hitRecord ) ) continue;
 
 					float		 nbParticles = static_cast<float>( _nbVPL );
 					float		 newPower	 = light->getPower() / glm::pow( hitRecord._distance, 2.f );
@@ -99,7 +98,7 @@ namespace RT_ISICG
 						const Vec3f direction = sampleHemisphere( hitRecord._normal, halton( 2 * j + 2, i ), halton( 2 * j + 3, i ) );
 						reflectedRay = Ray( position, glm::normalize( direction ) );
 
-						if ( !p_scene.intersect( reflectedRay, 0.01f, p_tMax, hitRecord ) ) break;
+						if ( !p_scene.intersect( reflectedRay, p_tMin, p_tMax, hitRecord ) ) break;
 
 						newPower *= 1.f / glm::pow( hitRecord._distance, 2.f );
 						nbParticles *= _probaDiffuse;
@@ -114,7 +113,7 @@ namespace RT_ISICG
 				end = start;
 			}
 		}
-		_lightTree.build( &_VPLs );
+		//_lightTree.build( &_VPLs );
 		std::cout << "Nombre de VPL " << _VPLs.size() << std::endl;
 	}
 

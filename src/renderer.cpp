@@ -69,11 +69,11 @@ namespace RT_ISICG
 				if ( p_scene.intersect( ray, distMin, distMax, hitRecord ) )
 				{
 					nbCameraSample++;
-					vplIntegrator->addHitRecordSample( &hitRecord );
+					vplIntegrator->addHitRecordSample( hitRecord );
 				}
 			}
 
-			vplIntegrator->sampleVPL( p_scene, distMax );
+			vplIntegrator->sampleVPL( p_scene, distMin, distMax );
 			//const float sx	= randomFloat() * width;
 			//const float sy	= randomFloat() * height;
 			//const Ray	ray = p_camera->generateRay( sx, sy );

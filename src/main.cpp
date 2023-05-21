@@ -35,7 +35,7 @@ namespace RT_ISICG
 
 		// Create and setup the renderer.
 		Renderer renderer;
-		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );
+		renderer.setIntegrator( IntegratorType::VIRTUAL_POINT_LIGHT );
 		renderer.setBackgroundColor( GREY );
 		renderer.setNbPixelSamples( 1 );
 		renderer.setNbLightSamples( 1 );
