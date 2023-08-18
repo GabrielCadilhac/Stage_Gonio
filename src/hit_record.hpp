@@ -24,6 +24,8 @@ namespace RT_ISICG
 		Vec3f			   _normal	 = VEC3F_ZERO;
 		float			   _distance = 0.f;
 		const BaseObject * _object	 = nullptr;
+		float			   _u		 = 0.f;
+		float			   _v		 = 0.f;
 	};
 } // namespace RT_ISICG
 

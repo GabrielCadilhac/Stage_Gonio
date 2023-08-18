@@ -13,9 +13,14 @@ namespace RT_ISICG
 										  const Vec3f & p_up,
 										  const float	p_fovy,
 										  const float	p_aspectRatio )
-		: BaseCamera( p_position ), _fovy( p_fovy ), _aspectRatio( p_aspectRatio )
+		: BaseCamera( p_position ), _fovy( p_fovy ), _aspectRatio( p_aspectRatio ), _lookAt( p_lookAt )
 	{
-		_w = glm::normalize( p_position - p_lookAt);
+		lookAt( p_lookAt, p_up );
+	}
+
+	void PerspectiveCamera::lookAt( const Vec3f & p_lookAt, const Vec3f & p_up )
+	{
+		_w = glm::normalize( _position - p_lookAt );
 		_u = glm::cross( p_up, _w );
 		_v = glm::cross( _w, _u );
 
@@ -24,7 +29,7 @@ namespace RT_ISICG
 
 	void PerspectiveCamera::_updateViewport()
 	{
-		const float height = 2.f * std::max(glm::tan( glm::radians( _fovy / 2.f ) ), 0.f) * _focalDistance;
+		const float height = 2.f * std::max( glm::tan( glm::radians( _fovy / 2.f ) ), 0.f ) * _focalDistance;
 		const float width  = height * _aspectRatio;
 
 		_viewportU = _u * width;

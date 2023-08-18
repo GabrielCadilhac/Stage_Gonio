@@ -19,6 +19,14 @@ namespace RT_ISICG
 			p_hitRecord._distance = t1;
 			p_hitRecord._object	  = this;
 
+			// Compute angles
+			const float theta = std::atan2( -p_hitRecord._point.z, p_hitRecord._point.x );
+			const float phi	  = glm::acos( -p_hitRecord._point.y / _geometry.getRadius() );
+
+			// And UV coordinates
+			p_hitRecord._u	  = ( theta + PIf ) * INV_2PIf;
+			p_hitRecord._v	  = phi * INV_PIf;
+
 			return true;
 		}
 		return false;

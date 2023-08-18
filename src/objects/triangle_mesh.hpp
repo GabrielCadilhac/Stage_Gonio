@@ -46,6 +46,8 @@ namespace RT_ISICG
 		// Check for any intersection between p_tMin and p_tMax.
 		bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const override;
 
+		virtual inline bool isPlane() const override { return false; }
+
 	  private:
 		std::vector<Vec3f>				  _vertices;
 		std::vector<Vec3f>				  _normals;

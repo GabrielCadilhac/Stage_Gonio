@@ -101,11 +101,12 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\src;$(SolutionDir)\lib\assimp;$(SolutionDir)\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\lib\stb;$(ProjectDir)\lib\assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -138,6 +139,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\src;$(SolutionDir)\lib\assimp;$(SolutionDir)\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +155,7 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\s8_isir\src\objects\sphere.cpp" />
     <ClCompile Include="src\aabb.cpp" />
     <ClCompile Include="src\bvh.cpp" />
     <ClCompile Include="src\cameras\perspective_camera.cpp" />
@@ -161,20 +164,12 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\geometry\triangle_mesh_geometry.cpp" />
     <ClCompile Include="src\integrators\direct_lighting_integrator.cpp" />
     <ClCompile Include="src\integrators\ray_cast_integrator.cpp" />
-    <ClCompile Include="src\integrators\virtual_point_light_integrator.cpp" />
-    <ClCompile Include="src\integrators\whitted_integrator.cpp" />
-    <ClCompile Include="src\kd_tree.cpp" />
-    <ClCompile Include="src\lights\disk_light.cpp" />
+    <ClCompile Include="src\lights\directionnal_light.cpp" />
     <ClCompile Include="src\lights\point_light.cpp" />
     <ClCompile Include="src\lights\quad_light.cpp" />
-    <ClCompile Include="src\light_tree.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\materials\transparent_material.cpp" />
-    <ClCompile Include="src\objects\hexagonal_prism_implicit.cpp" />
-    <ClCompile Include="src\objects\implicit_box_frame.cpp" />
-    <ClCompile Include="src\objects\implicit_octahedron.cpp" />
-    <ClCompile Include="src\objects\implicit_sphere.cpp" />
-    <ClCompile Include="src\objects\implicit_surface.cpp" />
+    <ClCompile Include="src\movement\generator_movement.cpp" />
+    <ClCompile Include="src\noise\lrpn.cpp" />
     <ClCompile Include="src\objects\plane.cpp" />
     <ClCompile Include="src\objects\sphere.cpp" />
     <ClCompile Include="src\objects\triangle_mesh.cpp" />
@@ -182,10 +177,13 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\utils\console_progress_bar.cpp" />
+    <ClCompile Include="src\utils\noise_statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\s8_isir\src\objects\sphere.hpp" />
     <ClInclude Include="src\aabb.hpp" />
     <ClInclude Include="src\brdfs\cook_torrance_brdf.hpp" />
+    <ClInclude Include="src\brdfs\micro_brdf.hpp" />
     <ClInclude Include="src\brdfs\oren_nayar_brdf.hpp" />
     <ClInclude Include="src\brdfs\phong_brdf.hpp" />
     <ClInclude Include="src\bvh.hpp" />
@@ -200,15 +198,11 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\integrators\base_integrator.hpp" />
     <ClInclude Include="src\integrators\direct_lighting_integrator.hpp" />
     <ClInclude Include="src\integrators\ray_cast_integrator.hpp" />
-    <ClInclude Include="src\integrators\virtual_point_light_integrator.hpp" />
-    <ClInclude Include="src\integrators\whitted_integrator.hpp" />
-    <ClInclude Include="src\kd_tree.hpp" />
     <ClInclude Include="src\lights\base_light.hpp" />
-    <ClInclude Include="src\lights\disk_light.hpp" />
+    <ClInclude Include="src\lights\directionnal_light.hpp" />
     <ClInclude Include="src\lights\light_sample.hpp" />
     <ClInclude Include="src\lights\point_light.hpp" />
     <ClInclude Include="src\lights\quad_light.hpp" />
-    <ClInclude Include="src\light_tree.hpp" />
     <ClInclude Include="src\materials\color_material.hpp" />
     <ClInclude Include="src\defines.hpp" />
     <ClInclude Include="src\io\stb_include.hpp" />
@@ -216,15 +210,14 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\materials\lambert_material.hpp" />
     <ClInclude Include="src\materials\matte_material.hpp" />
     <ClInclude Include="src\materials\metal_material.hpp" />
-    <ClInclude Include="src\materials\mirror_material.hpp" />
-    <ClInclude Include="src\materials\plastic_material.hpp" />
-    <ClInclude Include="src\materials\transparent_material.hpp" />
+    <ClInclude Include="src\materials\procedural_material.hpp" />
+    <ClInclude Include="src\materials\texture_material.hpp" />
+    <ClInclude Include="src\movement\emitter_movement.hpp" />
+    <ClInclude Include="src\movement\generator_movement.hpp" />
+    <ClInclude Include="src\noise\gabor_noise.hpp" />
+    <ClInclude Include="src\noise\lrpn.hpp" />
+    <ClInclude Include="src\noise\perlin_noise.hpp" />
     <ClInclude Include="src\objects\base_object.hpp" />
-    <ClInclude Include="src\objects\hexagonal_prism_implicit.hpp" />
-    <ClInclude Include="src\objects\implicit_box_frame.hpp" />
-    <ClInclude Include="src\objects\implicit_octahedron.hpp" />
-    <ClInclude Include="src\objects\implicit_sphere.hpp" />
-    <ClInclude Include="src\objects\implicit_surface.hpp" />
     <ClInclude Include="src\objects\plane.hpp" />
     <ClInclude Include="src\objects\sphere.hpp" />
     <ClInclude Include="src\objects\triangle_mesh.hpp" />
@@ -235,6 +228,9 @@ xcopy /y /d  "$(ProjectDir)lib\zlib1.dll" "$(OutDir)"</Command>
     <ClInclude Include="src\utils\chrono.hpp" />
     <ClInclude Include="src\utils\console_progress_bar.hpp" />
     <ClInclude Include="src\utils\convert.hpp" />
+    <ClInclude Include="src\utils\data_saver.hpp" />
+    <ClInclude Include="src\utils\noise.hpp" />
+    <ClInclude Include="src\utils\noise_statistics.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="results\image.jpg" />

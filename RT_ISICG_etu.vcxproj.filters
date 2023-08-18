@@ -65,13 +65,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\sphere.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\cameras\perspective_camera.cpp">
@@ -101,9 +95,6 @@
     <ClCompile Include="src\bvh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\implicit_surface.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\geometry\plane_geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -119,34 +110,25 @@
     <ClCompile Include="src\lights\quad_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\integrators\whitted_integrator.cpp">
+    <ClCompile Include="src\lights\directionnal_light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\materials\transparent_material.cpp">
+    <ClCompile Include="src\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\implicit_sphere.cpp">
+    <ClCompile Include="src\movement\generator_movement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\implicit_box_frame.cpp">
+    <ClCompile Include="src\utils\noise_statistics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\implicit_octahedron.cpp">
+    <ClCompile Include="..\s8_isir\src\objects\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\lights\disk_light.cpp">
+    <ClCompile Include="src\objects\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\integrators\virtual_point_light_integrator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\kd_tree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\light_tree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\objects\hexagonal_prism_implicit.cpp">
+    <ClCompile Include="src\noise\lrpn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -163,9 +145,6 @@
     <ClInclude Include="src\ray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\objects\sphere.hpp">
-      <Filter>Header Files\objects</Filter>
-    </ClInclude>
     <ClInclude Include="src\materials\base_material.hpp">
       <Filter>Header Files\materials</Filter>
     </ClInclude>
@@ -177,9 +156,6 @@
     </ClInclude>
     <ClInclude Include="src\integrators\ray_cast_integrator.hpp">
       <Filter>Header Files\integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\cameras\perspective_camera.hpp">
       <Filter>Header Files\cameras</Filter>
@@ -211,9 +187,6 @@
     <ClInclude Include="src\hit_record.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\lights\light_sample.hpp">
-      <Filter>Header Files\lights</Filter>
-    </ClInclude>
     <ClInclude Include="src\brdfs\lambert_brdf.hpp">
       <Filter>Header Files\brdfs</Filter>
     </ClInclude>
@@ -231,9 +204,6 @@
     </ClInclude>
     <ClInclude Include="src\bvh.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objects\implicit_surface.hpp">
-      <Filter>Header Files\objects</Filter>
     </ClInclude>
     <ClInclude Include="src\geometry\plane_geometry.hpp">
       <Filter>Header Files</Filter>
@@ -253,55 +223,67 @@
     <ClInclude Include="src\brdfs\oren_nayar_brdf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\materials\matte_material.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\brdfs\phong_brdf.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\materials\plastic_material.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\brdfs\cook_torrance_brdf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\materials\metal_material.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\integrators\whitted_integrator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\materials\transparent_material.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\materials\mirror_material.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objects\implicit_sphere.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objects\implicit_box_frame.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objects\implicit_octahedron.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lights\disk_light.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\integrators\virtual_point_light_integrator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\convert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\kd_tree.hpp">
+    <ClInclude Include="src\materials\texture_material.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\light_tree.hpp">
+    <ClInclude Include="src\lights\directionnal_light.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\objects\hexagonal_prism_implicit.hpp">
+    <ClInclude Include="src\renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\noise.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\materials\procedural_material.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\brdfs\micro_brdf.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\data_saver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\movement\emitter_movement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\movement\generator_movement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\noise\perlin_noise.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\noise\lrpn.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\noise\gabor_noise.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\noise_statistics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\s8_isir\src\objects\sphere.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\sphere.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\materials\matte_material.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\materials\metal_material.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lights\light_sample.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

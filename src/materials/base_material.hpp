@@ -21,8 +21,8 @@ namespace RT_ISICG
 		virtual inline const Vec3f & getFlatColor() const = 0;
 		virtual inline const Vec3f & getReflectivity() const = 0;
 
-		virtual inline const bool isMirror() const { return false; };
-		virtual inline const bool isTransparent() const { return false; };
+		virtual inline bool isMirror() const { return false; }
+		virtual inline bool isTransparent() const { return false; }
 
 		virtual const std::string & getName() const final { return _name; }
 		virtual const float getIOR() const { return 1.f; }

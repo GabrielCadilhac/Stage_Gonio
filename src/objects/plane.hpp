@@ -22,6 +22,8 @@ namespace RT_ISICG
 
 		virtual bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const override;
 		
+		virtual inline bool isPlane() const override { return true; }
+
 	  private:
 		PlaneGeometry _geometry;
 

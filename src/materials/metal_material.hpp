@@ -31,7 +31,7 @@ namespace RT_ISICG
 
 			const Vec3f specular
 				= _cookTorranceBRDF.evaluate( p_lightSample._direction, -p_ray.getDirection(), p_hitRecord._normal );
-
+			
 			return ( 1.f - _metalness ) * diffuse + _metalness * specular;
 		}
 

@@ -16,6 +16,18 @@ namespace RT_ISICG
 			p_hitRecord._distance = t;
 			p_hitRecord._object	  = this;
 
+			// Compute UV coordinates
+			const Vec3f a = glm::cross( _geometry.getNormal(), Vec3f( 1.f, 0.f, 0.f ) );
+			const Vec3f b = glm::cross( _geometry.getNormal(), Vec3f( 0.f, 1.f, 0.f ) );
+			const Vec3f c = glm::cross( _geometry.getNormal(), Vec3f( 0.f, 0.f, 1.f ) );
+			
+			const Vec3f maxAB = glm::dot( a, a ) < glm::dot( b, b ) ? b : a;
+			const Vec3f u	  = glm::normalize( glm::dot( maxAB, maxAB ) < glm::dot( c, c ) ? c : maxAB );
+			const Vec3f v	  = glm::cross( _geometry.getNormal(), u );
+
+			p_hitRecord._u = glm::dot(u, p_hitRecord._point );
+			p_hitRecord._v = glm::dot(v, p_hitRecord._point );
+
 			return true;
 		}
 		return false;

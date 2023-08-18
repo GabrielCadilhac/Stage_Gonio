@@ -29,6 +29,8 @@ namespace RT_ISICG
 		// Check for any intersection.
 		virtual bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const = 0;
 
+		virtual inline bool isPlane() const = 0;
+
 	  protected:
 		const std::string _name;
 		BaseMaterial *	  _material = nullptr;

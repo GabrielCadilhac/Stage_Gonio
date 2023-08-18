@@ -39,6 +39,7 @@ namespace RT_ISICG
 	const Vec4f VEC4F_ZERO = Vec4f( 0.f );
 
 	// Matrices.
+	using Mat2f = glm::mat2;
 	using Mat3f = glm::mat3;
 	using Mat4f = glm::mat4;
 

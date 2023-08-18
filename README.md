@@ -1,4 +1,4 @@
-# S8_ISIR
+# Stage Gonio réflectomètre virtuel
 
 
 

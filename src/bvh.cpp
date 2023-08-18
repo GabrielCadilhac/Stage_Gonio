@@ -130,6 +130,8 @@ namespace RT_ISICG
 				p_hitRecord.faceNormal( p_ray.getDirection() );
 				p_hitRecord._distance = tClosest;
 				p_hitRecord._object	  = ( *_triangles )[ 0 ].getRefMesh();
+				p_hitRecord._u		  = uClosest;
+				p_hitRecord._v		  = vClosest;
 
 				return true;
 			}

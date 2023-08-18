@@ -2,6 +2,7 @@
 #define __RT_ISICG_PERSPECTIVE_CAMERA__
 
 #include "base_camera.hpp"
+#include "utils/convert.hpp"
 
 namespace RT_ISICG
 {
@@ -16,14 +17,35 @@ namespace RT_ISICG
 						   const float	 p_fovy,
 						   const float	 p_aspectRatio );
 
-		~PerspectiveCamera() = default;
+		~PerspectiveCamera() override = default;
 
 		inline Ray generateRay( const float p_sx, const float p_sy ) const override
 		{
-			Vec3f rayViewport = _viewportTopLeftCorner + p_sx * _viewportU - p_sy * _viewportV;
-			Vec3f direction = glm::normalize(rayViewport - _position);
-			return Ray( _position, direction );
+			const Vec3f rayViewport = _viewportTopLeftCorner + p_sx * _viewportU - p_sy * _viewportV;
+			const Vec3f direction   = glm::normalize( rayViewport - _position );
+			return Ray { _position, direction };
 		}
+
+		void lookAt( const Vec3f & p_lookAt, const Vec3f & p_up );
+
+		inline void move( const Vec3f & p_lookAt, const float p_theta, const float p_phi, const float p_distance )
+		{
+			_position = polarToCartesian( p_theta, p_phi ) * p_distance + p_lookAt;
+		}
+
+		inline void changePosition( const Vec3f & p_newPosition )
+		{
+			_position = p_newPosition;
+			lookAt( _lookAt, Vec3f( 0.f, 1.f, 0.f ) );
+		}
+
+		inline void rotate( const float p_theta, const float p_phi, const float p_distance )
+		{
+			move( _lookAt, p_theta, p_phi, p_distance );
+			lookAt( _lookAt, Vec3f( 0.f, 1.f, 0.f ) );
+		}
+
+		inline void setPosition( const Vec3f & p_newPosition ) { _position = p_newPosition; }
 
 	  private:
 		void _updateViewport();
@@ -42,6 +64,8 @@ namespace RT_ISICG
 		Vec3f _viewportTopLeftCorner = VEC3F_ZERO; // Top left corner position
 		Vec3f _viewportU			 = VEC3F_ZERO; // Horizontal vector
 		Vec3f _viewportV			 = VEC3F_ZERO; // Vertical vector
+	
+		Vec3f _lookAt = VEC3F_ZERO;
 	};
 } // namespace RT_ISICG
 
